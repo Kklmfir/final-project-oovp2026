@@ -9,18 +9,6 @@
 -- CREATE DATABASE "final-project-oovp2026";
 -- \c "final-project-oovp2026";
 
--- ERASE OLD DATA (OPTIONAL - if tables exist)
-DELETE FROM snack_orders;
-DELETE FROM booking_seats;
-DELETE FROM payments;
-DELETE FROM reviews;
-DELETE FROM bookings;
-DELETE FROM showtimes;
-DELETE FROM memberships;
-DELETE FROM snacks;
-DELETE FROM movies;
-DELETE FROM users;
-
 -- ERASE OLD TABLES (SAFE ORDER)
 DROP TABLE IF EXISTS
     snack_orders,
