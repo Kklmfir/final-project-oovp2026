@@ -48,11 +48,11 @@ INSERT INTO showtimes (id, movie_id, date, time, studio, format, price_mod) VALU
 
 -- SNACKS
 INSERT INTO snacks (id, name, price, icon) VALUES
-(1, 'Popcorn Caramel', 55000, '🍿'),
-(2, 'Coca Cola', 25000, '🥤'),
-(3, 'French Fries', 35000, '🍟'),
-(4, 'Hotdog', 40000, '🌭'),
-(5, 'Nachos Cheese', 45000, '🧀');
+(1, 'Popcorn Caramel', 55000, 'ic_pc'),
+(2, 'Coca Cola', 25000, 'ic_cc'),
+(3, 'French Fries', 35000, 'ic_ff'),
+(4, 'Hotdog', 40000, 'ic_htdg'),
+(5, 'Nachos Cheese', 45000, 'ic_nc');
 
 -- BOOKINGS
 INSERT INTO bookings (id, user_id, showtime_id, total_paid, status) VALUES
@@ -111,17 +111,10 @@ INSERT INTO snack_orders (booking_id, snack_id, qty) VALUES
 
 -- REVIEWS
 INSERT INTO reviews (id, user_id, movie_id, rating, text) VALUES
-(1, 1, 5, 9.50,
-'IMAX-nya keren banget, naga dan sound effect-nya gila.'),
-(2, 2, 4, 8.70,
-'Lucu banget. Satu studio ketawa terus.'),
-(3, 3, 2, 8.20,
-'Horror-nya dapet, apalagi jumpscare pabriknya.'),
-(4, 3, 3, 7.90,
-'Atmosfer gunungnya bikin tegang.'),
-(5, 4, 5, 9.80,
-'Worth every rupiah buat IMAX.'),
-(6, 4, 1, 8.90,
-'Animasi lokal sekelas Pixar sih ini.'),
-(7, 5, 1, 8.00,
-'Cocok buat ditonton rame-rame.');
+(1, 1, 5, 9.50, 'IMAX-nya keren banget, naga dan sound effect-nya gila.'),
+(2, 2, 4, 8.70, 'Lucu banget. Satu studio ketawa terus.'),
+(3, 3, 2, 8.20, 'Horror-nya dapet, apalagi jumpscare pabriknya.'),
+(4, 3, 3, 7.90, 'Atmosfer gunungnya bikin tegang.'),
+(5, 4, 5, 9.80, 'Worth every rupiah buat IMAX.'),
+(6, 4, 1, 8.90, 'Animasi lokal sekelas Pixar sih ini.'),
+(7, 5, 1, 8.00, 'Cocok buat ditonton rame-rame.');
