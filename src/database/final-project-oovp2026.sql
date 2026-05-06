@@ -41,90 +41,90 @@ SET time_zone = '+00:00';
 
 -- TABLE: bookings
 CREATE TABLE bookings (
-    id INT(11) NOT NULL,
-    user_id INT(11) DEFAULT NULL,
-    showtime_id INT(11) DEFAULT NULL,
-    total_paid INT(11) DEFAULT NULL,
+    id INT(12) NOT NULL,
+    user_id INT(12) DEFAULT NULL,
+    showtime_id INT(12) DEFAULT NULL,
+    total_paid INT(12) DEFAULT NULL,
     status ENUM('active','expired','cancelled') DEFAULT 'active',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- TABLE: booking_seats
 CREATE TABLE booking_seats (
-    booking_id INT(11) NOT NULL,
+    booking_id INT(12) NOT NULL,
     seat_code VARCHAR(5) NOT NULL
 );
 
 -- TABLE: memberships
 CREATE TABLE memberships (
-    id INT(11) NOT NULL,
-    user_id INT(11) DEFAULT NULL,
-    tier ENUM('Silver','Gold','Platinum') DEFAULT NULL,
+    id INT(12) NOT NULL,
+    user_id INT(12) DEFAULT NULL,
+    tier ENUM('Silver', 'Gold', 'Platinum') DEFAULT NULL,
     since DATE DEFAULT NULL
 );
 
 -- TABLE: movies
 CREATE TABLE movies (
-    id INT(11) NOT NULL,
+    id INT(12) NOT NULL,
     title VARCHAR(200) DEFAULT NULL,
     genre VARCHAR(100) DEFAULT NULL,
-    duration INT(11) DEFAULT NULL,
-    rating DECIMAL(2,1) DEFAULT NULL,
-    price INT(11) DEFAULT NULL,
-    year INT(11) DEFAULT NULL,
+    duration INT DEFAULT NULL,
+    rating DECIMAL(3, 2) DEFAULT NULL,
+    price INT DEFAULT NULL,
+    year INT DEFAULT NULL,
     synopsis TEXT DEFAULT NULL
 );
 
 -- TABLE: payments
 CREATE TABLE payments (
-    id INT(11) NOT NULL,
-    booking_id INT(11) DEFAULT NULL,
+    id INT(12) NOT NULL,
+    booking_id INT(12) DEFAULT NULL,
     method VARCHAR(50) DEFAULT NULL,
-    amount INT(11) DEFAULT NULL,
+    amount float DEFAULT NULL,
     paid_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- TABLE: reviews
 CREATE TABLE reviews (
-    id INT(11) NOT NULL,
-    user_id INT(11) DEFAULT NULL,
-    movie_id INT(11) DEFAULT NULL,
-    rating INT(11) DEFAULT NULL,
+    id INT(12) NOT NULL,
+    user_id INT(12) DEFAULT NULL,
+    movie_id INT(12) DEFAULT NULL,
+    rating DECIMAL(3, 2) DEFAULT NULL,
     text TEXT DEFAULT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- TABLE: showtimes
 CREATE TABLE showtimes (
-    id INT(11) NOT NULL,
-    movie_id INT(11) DEFAULT NULL,
+    id INT(12) NOT NULL,
+    movie_id INT(12) DEFAULT NULL,
     date DATE DEFAULT NULL,
     time TIME DEFAULT NULL,
     studio VARCHAR(50) DEFAULT NULL,
     format VARCHAR(20) DEFAULT NULL,
-    price_mod INT(11) DEFAULT NULL
+    price_mod FLOAT DEFAULT NULL
 );
 
 -- TABLE: snacks
 CREATE TABLE snacks (
-    id INT(11) NOT NULL,
+    id INT(12) NOT NULL,
     name VARCHAR(100) DEFAULT NULL,
-    price INT(11) DEFAULT NULL,
+    price INT(12) DEFAULT NULL,
     icon VARCHAR(10) DEFAULT NULL
 );
 
 -- TABLE: snack_orders
 CREATE TABLE snack_orders (
-    booking_id INT(11) NOT NULL,
-    snack_id INT(11) NOT NULL,
-    qty INT(11) DEFAULT NULL
+    booking_id INT(12) NOT NULL,
+    snack_id INT(12) NOT NULL,
+    qty INT(12) DEFAULT NULL
 );
 
 -- TABLE: users
 CREATE TABLE users (
-    id INT(11) NOT NULL,
-    name VARCHAR(100) DEFAULT NULL,
-    email VARCHAR(100) DEFAULT NULL,
+    id INT(12) NOT NULL,
+    name VARCHAR(255) DEFAULT NULL,
+    email VARCHAR(255) DEFAULT NULL,
     password VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -170,14 +170,14 @@ ALTER TABLE users
     ADD UNIQUE KEY uq_email (email);
 
 -- AUTO INCREMENT
-ALTER TABLE bookings     MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE memberships  MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE movies       MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE payments     MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE reviews      MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE showtimes    MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE snacks       MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE users        MODIFY id INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE bookings     MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE memberships  MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE movies       MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE payments     MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE reviews      MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE showtimes    MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE snacks       MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
+ALTER TABLE users        MODIFY id INT(12) NOT NULL AUTO_INCREMENT;
 
 -- FOREIGN KEYS
 ALTER TABLE bookings
