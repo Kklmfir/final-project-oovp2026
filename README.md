@@ -388,12 +388,16 @@ Thumbs.db
 
 ---
 
-# License & Contact
+# Contact
 
-Add a `LICENSE` file if you want to use a specific license such as:
+## Our Team
 
-- MIT License
-- Apache License 2.0
-- GPL
+| Name | Email | GitHub |
+|---|---|---|
+| Alfairaz Putra Anantar | alfairaz.anantar@student.president.ac.id | [@AlfairazAnantar](https://github.com/AlfairazAnantar) |
+| Azizah Putri Susanto | azizah.susanto@student.president.ac.id | [@azizahputri](https://github.com/azizahputri) |
+| Keefi Almer Firdaus | keefi.firdaus@student.president.ac.id | [@KeefiFirdaus](https://github.com/KeefiFirdaus) |
+| M Fattah Fadli Rohman P | m.fattahputra@student.president.ac.id | [@fattahfadli](https://github.com/fattahfadli) |
+| Yesi Nurfitriyani | yesi.nurfitriyani@student.president.ac.id | [@yesinur](https://github.com/yesinur) |
 
-For questions or issues, open an Issue in this repository.
+For questions, suggestions, or issues, please open an Issue in this repository.
