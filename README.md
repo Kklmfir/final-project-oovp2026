@@ -26,67 +26,6 @@ Build a simple library management system with basic features:
 
 ---
 
-## Database Schema
-
-Main database (example name: `library_system`) with 3 primary tables:
-
-### 1) Books
-
-- `ID` (INT, PRIMARY KEY, AUTO_INCREMENT)
-- `Title` (VARCHAR)
-- `Author` (VARCHAR)
-- `ISBN` (VARCHAR)
-- `Availability` (BOOLEAN / TINYINT(1))
-
-### 2) Member
-
-- `ID` (INT, PRIMARY KEY, AUTO_INCREMENT)
-- `Name` (VARCHAR)
-- `Register_Date` (DATE / DATETIME)
-
-### 3) Issued_Books
-
-- `ID` (INT, PRIMARY KEY, AUTO_INCREMENT)
-- `Book_ID` (INT) — foreign key to `Books(ID)`
-- `Member_ID` (INT) — foreign key to `Member(ID)`
-- `Date_issued` (DATE / DATETIME)
-- `Date_returned` (DATE / DATETIME, nullable)
-
----
-
-## Example SQL (MySQL / MariaDB)
-
-```sql
-CREATE DATABASE IF NOT EXISTS library_system;
-USE library_system;
-
-CREATE TABLE Books (
-  ID INT AUTO_INCREMENT PRIMARY KEY,
-  Title VARCHAR(255) NOT NULL,
-  Author VARCHAR(255),
-  ISBN VARCHAR(100),
-  Availability TINYINT(1) DEFAULT 1
-);
-
-CREATE TABLE Member (
-  ID INT AUTO_INCREMENT PRIMARY KEY,
-  Name VARCHAR(255) NOT NULL,
-  Register_Date DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE Issued_Books (
-  ID INT AUTO_INCREMENT PRIMARY KEY,
-  Book_ID INT NOT NULL,
-  Member_ID INT NOT NULL,
-  Date_issued DATETIME DEFAULT CURRENT_TIMESTAMP,
-  Date_returned DATETIME,
-  FOREIGN KEY (Book_ID) REFERENCES Books(ID) ON DELETE CASCADE,
-  FOREIGN KEY (Member_ID) REFERENCES Member(ID) ON DELETE CASCADE
-);
-```
-
----
-
 ## Tech Stack
 
 | Component | Technology |
@@ -395,9 +334,9 @@ Thumbs.db
 | Name | Email | GitHub |
 |---|---|---|
 | Alfairaz Putra Anantar | alfairaz.anantar@student.president.ac.id | [@AlfairazAnantar](https://github.com/AlfairazAnantar) |
-| Azizah Putri Susanto | azizah.susanto@student.president.ac.id | [@azizahputri](https://github.com/azizahputri) |
+| Azizah Putri Susanto | azizah.susanto@student.president.ac.id | [@*](https://github.com/) |
 | Keefi Almer Firdaus | keefi.firdaus@student.president.ac.id | [@KeefiFirdaus](https://github.com/KeefiFirdaus) |
-| M Fattah Fadli Rohman P | m.fattahputra@student.president.ac.id | [@fattahfadli](https://github.com/fattahfadli) |
-| Yesi Nurfitriyani | yesi.nurfitriyani@student.president.ac.id | [@yesinur](https://github.com/yesinur) |
+| M Fattah Fadli Rohman P | m.fattahputra@student.president.ac.id | [@*](https://github.com/) |
+| Yesi Nurfitriyani | yesi.nurfitriyani@student.president.ac.id | [@*](https://github.com/) |
 
 For questions, suggestions, or issues, please open an Issue in this repository.
