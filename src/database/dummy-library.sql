@@ -1,32 +1,34 @@
 -- DUMMY DATA FINAL-PROJECT-OOVP2026
 
 -- ERASE OLD DATA (OPTIONAL - if tables exist)
+DELETE FROM Author;
 DELETE FROM Book;
+DELETE FROM Category;
+DELETE FROM Issued_Book;
 DELETE FROM Member;
 DELETE FROM Member_Type;
-DELETE FROM Issued_Book;
+DELETE FROM Publisher;
 
 -- DISABLE FOREIGN KEY CHECKS TO AVOID CONSTRAINT ERRORS DURING INSERTION
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- 1. Book
-INSERT INTO Book (Book_ID, Book_Title, Book_Author, ISBN, Book_Category, Book_Status, Book_Stock) VALUES
-    ('BK001', 'Clean Code', 'Robert C. Martin', '9780132350884', 'Programming', 1, 5),
-    ('BK002', 'The Clean Coder', 'Robert C. Martin', '978013781073', 'Programming', 1, 3),
-    ('BK003', 'Code Complete', 'Steve McConnell', '9780735619678', 'Programming', 1, 4),
-    ('BK004', 'Refactoring', 'Martin Fowler', '9780201485677', 'Programming', 1, 2),
-    ('BK005', 'Design Patterns', 'Erich Gamma', '9780201633610', 'Software Engineering', 1, 3),
-    ('BK006', 'The Pragmatic Programmer', 'Andrew Hunt', '9780201616224', 'Programming', 1, 2),
-    ('BK007', 'Introduction to Algorithms', 'Thomas H. Cormen', '9780262033848', 'Computer Science', 1, 3),
-    ('BK008', 'Artificial Intelligence: A Modern Approach', 'Stuart Russell and Peter Norvig', '9780136042594', 'Artificial Intelligence', 1, 2),
-    ('BK009', 'Deep Learning', 'Ian Goodfellow, Yoshua Bengio, and Aaron Courville', '9780262035613', 'Machine Learning', 1, 2),
-    ('BK010', 'Computer Networking: A Top-Down Approach', 'James F. Kurose and Keith W. Ross', '9780133594140', 'Networking', 1, 2),
-    ('BK011', 'Operating System Concepts', 'Abraham Silberschatz, Peter B. Galvin, and Greg Gagne', '9781119456339', 'Operating System', 1, 2),
-    ('BK012', 'Cybersecurity Essentials', 'Charles J. Brooks, Christopher Grow, Philip Craig, and Donald Shorter Jr.', '9781119362395','Cybersecurity' ,0, 1),
-    ('BK013', 'Think and Grow Rich','Napoleon Hill','9781585424337','Motivation' ,1, 2),
-    ('BK014', 'Linux Basics for Hackers','OccupyTheWeb','9781593278557','Linux' ,0, 1),
-    ('BK015', 'The Art of Computer Programming','Donald E. Knuth','9780201896831','Computer Science' ,1, 3),
-    ('BK016', 'Cracking the Coding Interview','Gayle Laakmann McDowell','9780984782857','Programming' ,1, 2);
+INSERT INTO Book (Book_ID, Book_Title, Book_Author_ID, Book_Category_ID, Book_Publisher_ID, Book_Year, ISBN, Book_Stock, Book_Status) VALUES
+    ('BK001', 'Laskar Pelangi', 'AUTH001', 'CAT001', 'PUB001', 2005, '9789793062792', 6, 1), -- Available
+    ('BK002', 'Sang Pemimpi', 'AUTH001', 'CAT001', 'PUB001', 2006, '9789791227209', 5, 1), -- Available
+    ('BK003', 'Bumi Manusia', 'AUTH002', 'CAT003', 'PUB009', 1980, '9789799731234', 8, 1), -- Available
+    ('BK004', 'Anak Semua Bangsa', 'AUTH002', 'CAT003', 'PUB009', 1981, '9789799731241', 6, 0), -- Borrowed
+    ('BK005', 'Negeri 5 Menara', 'AUTH003', 'CAT009', 'PUB002', 2009, '9789791227209', 4, 1), -- Available
+    ('BK006', 'Ranah 3 Warna', 'AUTH003', 'CAT009', 'PUB002', 2011, '9789792248616', 3, 0), -- Borrowed
+    ('BK007', 'Ayat-Ayat Cinta', 'AUTH004', 'CAT004', 'PUB003', 2004, '9789793210605', 7, 1), -- Available
+    ('BK008', 'Ketika Cinta Bertasbih', 'AUTH004', 'CAT004', 'PUB003', 2007, '9789791102162', 5, 0), -- Borrowed
+    ('BK009', 'Bumi', 'AUTH005', 'CAT005', 'PUB004', 2014, '9786020332956', 5, 1), -- Available
+    ('BK010', 'Bulan', 'AUTH005', 'CAT005', 'PUB004', 2015, '9786020351179', 3, 1), -- Available
+    ('BK011', 'Supernova: Ksatria, Puteri dan Bintang Jatuh', 'AUTH006', 'CAT005', 'PUB005', 2001, '9789799625700', 6, 1), -- Available
+    ('BK012', 'Perahu Kertas', 'AUTH008', 'CAT008', 'PUB002', 2009, '9789791227216', 4, 1), -- Available
+    ('BK013', 'Atomic Habits', 'AUTH009', 'CAT002', 'PUB002', 2019, '9786020633176', 4, 1), -- Available
+    ('BK014', 'Filosofi Teras', 'AUTH010', 'CAT006', 'PUB006', 2018, '9786024125189', 6, 1), -- Available
+    ('BK015', 'Belajar Dasar Python', 'AUTH007', 'CAT007', 'PUB010', 2023, '9786231234567', 2, 0); -- Borrowed
 
 -- 2. Member_Type
 INSERT INTO Member_Type (Member_Type_ID, Type_Name, Loan_Days, Loan_Limit, Fine_Per_Day) VALUES
@@ -99,6 +101,45 @@ INSERT INTO Issued_Book (Issued_ID, Book_ID, Member_ID, Date_issued, Date_return
     ('IS013', 'BK013', 'GST2026004', '2026-04-22 21:00:00', '2026-04-29 22:00:00'), -- Azizah Putri borrows "Think and Grow Rich"
     ('IS014', 'BK014', 'GST2026001', '2026-04-23 22:00:00', '2026-04-30 23:00:00'), -- Yesi N. Fitri borrows "Linux Basics for Hackers"
     ('IS015', 'BK015', 'GST2026002', '2026-04-24 23:00:00', '2026-05-01 08:00:00'); -- Fattah Rohman borrows "The Art of Computer Programming"
+
+-- 5. Category
+INSERT INTO Category (Category_ID, Category_Name, Description) VALUES
+    ('CAT001', 'Novels', 'Books that contain fictional stories, often with a narrative structure and character development.'),
+    ('CAT002', 'Self Improvement', 'Books that provide guidance and advice on personal growth, motivation, and achieving success.'),
+    ('CAT003', 'History', 'Books that cover historical events, periods, and figures.'),
+    ('CAT004', 'Religion', 'Books that explore religious beliefs, practices, and texts.'),
+    ('CAT005', 'Fantasy', 'Books that feature imaginary worlds, creatures, and magic.'),
+    ('CAT006', 'Psychology', 'Books that examine the human mind, behavior, and mental processes.'),
+    ('CAT007', 'Technology', 'Books that focus on technological advancements and innovations.'),
+    ('CAT008', 'Romance', 'Books that explore themes of love, relationships, and emotional connections.'),
+    ('CAT009', 'Education', 'Books that provide knowledge and skills for educational purposes.'),
+    ('CAT010', 'Business', 'Books that cover topics related to business management, entrepreneurship, and economics.');
+
+-- 6. Publisher
+INSERT INTO Publisher (Publisher_ID, Publisher_Name, Publisher_Contact) VALUES
+    ('PUB001', 'Bentang Pustaka', 'cs@bentangpustaka.com'),
+    ('PUB002', 'Gramedia Pustaka Utama', 'marketing@gpu.id'),
+    ('PUB003', 'Republika Penerbit', 'info@republika.co.id'),
+    ('PUB004', 'Tere Liye Publishing', 'admin@tereliye.com'),
+    ('PUB005', 'Supernova Publisher', 'contact@truedee.com'),
+    ('PUB006', 'Kompas', 'redaksi@kompas.id'),
+    ('PUB007', 'Elex Media Komputindo', 'cs@elexmedia.co.id'),
+    ('PUB008', 'Mizan', 'redaksi@mizan.com'),
+    ('PUB009', 'Lentera Dipantara', 'info@lentera-dipantara.or.id'),
+    ('PUB010', 'Bukunesia', 'support@bukunesia.id');
+
+-- 7. Author
+INSERT INTO Author (Author_ID, Author_Name, Author_Contact) VALUES    
+    ('AUTH001', 'Andrea Hirata', 'andrea.hirata@bentangpustaka.com'),
+    ('AUTH002', 'Pramoedya Ananta Toer', 'pramoedya@lentera-dipantara.or.id'),
+    ('AUTH003', 'Ahmad Fuadi', 'ahmad.fuadi@menaramedia.id'),
+    ('AUTH004', 'Habiburrahman El Shirazy', 'kangabik@shirazyinstitute.com'),
+    ('AUTH005', 'Tere Liye', 'admin@tereliye.com'),
+    ('AUTH006', 'Dewi Lestari', 'dee@truedee.com'),
+    ('AUTH007', 'Dian Nafi', 'dian.nafi@bukunesia.id'),
+    ('AUTH008', 'Dewi Lestari', 'dee@truedee.com'),
+    ('AUTH009', 'James Clear', 'team@jamesclear.com'),
+    ('AUTH010', 'Henry Manampiring', 'henry.manampiring@kompasgramedia.com');
 
 -- RE-ENABLE FOREIGN KEY CHECKS AFTER INSERTION
 SET FOREIGN_KEY_CHECKS = 1;

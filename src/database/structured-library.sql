@@ -12,21 +12,59 @@
 -- \c "final-project-oovp2026";
 
 -- ERASE OLD TABLES (SAFE ORDER)
-DROP TABLE IF EXISTS Issued_Book, Member, Member_Type, Book;
+DROP TABLE IF EXISTS Author, Book, Category, Issued_Book, Member, Member_Type, Publisher;
 
--- 1. Book
+-- Category
+CREATE TABLE IF NOT EXISTS Category (
+  Category_ID VARCHAR(10) PRIMARY KEY,
+  Category_Name VARCHAR(255) NOT NULL UNIQUE,
+  Description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Author
+CREATE TABLE IF NOT EXISTS Author (
+  Author_ID VARCHAR(10) PRIMARY KEY,
+  Author_Name VARCHAR(255) NOT NULL UNIQUE,
+  Author_Contact VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Publisher
+CREATE TABLE IF NOT EXISTS Publisher (
+  Publisher_ID VARCHAR(10) PRIMARY KEY,
+  Publisher_Name VARCHAR(255) NOT NULL UNIQUE,
+  Publisher_Contact VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Book
 CREATE TABLE IF NOT EXISTS Book (
   Book_ID VARCHAR(10) PRIMARY KEY,
   Book_Title VARCHAR(255) NOT NULL,
-  Book_Author VARCHAR(255) NOT NULL,
-  Book_Category VARCHAR(255) NOT NULL,
+  Book_Author_ID VARCHAR(10) NOT NULL, -- FK -> Author.Author_ID
+  Book_Category_ID VARCHAR(10) NOT NULL, -- FK -> Category.Category_ID
+  Book_Publisher_ID VARCHAR(10), -- FK -> Publisher.Publisher_ID
+  Book_Year INT NOT NULL,
   ISBN VARCHAR(13) NOT NULL UNIQUE,
   Book_Stock INT NOT NULL DEFAULT 1,
   Book_Status TINYINT(1) NOT NULL DEFAULT 1, -- 1 = available, 0 = loaned/unavailable
-  INDEX idx_book_isbn (ISBN)
+  INDEX idx_book_isbn (ISBN),
+  INDEX idx_book_category (Book_Category_ID),
+  INDEX idx_book_author (Book_Author_ID),
+  INDEX idx_book_publisher (Book_Publisher_ID),
+  CONSTRAINT fk_book_category FOREIGN KEY (Book_Category_ID)
+    REFERENCES Category(Category_ID)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_book_author FOREIGN KEY (Book_Author_ID)
+    REFERENCES Author(Author_ID)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_book_publisher FOREIGN KEY (Book_Publisher_ID)
+    REFERENCES Publisher(Publisher_ID)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Member_Type (lookup table for member categories and loan rules)
+-- Member_Type (lookup table for member categories and loan rules)
 CREATE TABLE IF NOT EXISTS Member_Type (
   Member_Type_ID VARCHAR(10) PRIMARY KEY,
   Type_Name VARCHAR(255) NOT NULL UNIQUE,     -- e.g. 'student', 'lecturer', 'guest'
@@ -35,7 +73,7 @@ CREATE TABLE IF NOT EXISTS Member_Type (
   Fine_Per_Day DECIMAL(8,2) NOT NULL DEFAULT 0.50
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Member
+-- Member
 CREATE TABLE IF NOT EXISTS Member (
   Member_ID VARCHAR(10) PRIMARY KEY,
   Member_Name VARCHAR(255) NOT NULL,
@@ -52,13 +90,13 @@ CREATE TABLE IF NOT EXISTS Member (
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 4. Issued_Book
+-- Issued_Book
 CREATE TABLE IF NOT EXISTS Issued_Book (
   Issued_ID VARCHAR(10) PRIMARY KEY,
   Book_ID VARCHAR(10) NOT NULL, -- FK -> Book.Book_ID
   Member_ID VARCHAR(10) NOT NULL, -- FK -> Member.Member_ID
   Date_issued DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Date_returned DATETIME NULL NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Date_returned DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_issued_book (Book_ID),
   INDEX idx_issued_member (Member_ID),
   CONSTRAINT fk_issued_book_book FOREIGN KEY (Book_ID)
