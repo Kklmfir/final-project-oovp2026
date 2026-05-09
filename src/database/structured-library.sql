@@ -11,8 +11,11 @@
 -- CREATE DATABASE "final-project-oovp2026";
 -- \c "final-project-oovp2026";
 
+-- Additional Feature
+DROP TABLE IF EXISTS Author_Journal, Institute, Journal, Issued_Journal, Author_Audio_Book, Audio_Book;
+
 -- ERASE OLD TABLES (SAFE ORDER)
-DROP TABLE IF EXISTS Author_Book, Book, Category, Issued_Book, Member, Member_Type, Publisher;
+DROP TABLE IF EXISTS Issued_Book, Member, Member_Type, Book, Author_Book, Category, Publisher;
 
 -- Author_Book
 CREATE TABLE IF NOT EXISTS Author_Book (
@@ -94,7 +97,7 @@ CREATE TABLE IF NOT EXISTS Book (
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
   CONSTRAINT fk_book_author FOREIGN KEY (Book_Author_ID)
-    REFERENCES Author(Author_Book_ID)
+    REFERENCES Author_Book(Author_Book_ID)
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
   CONSTRAINT fk_book_publisher FOREIGN KEY (Book_Publisher_ID)
@@ -123,16 +126,13 @@ CREATE TABLE IF NOT EXISTS Issued_Book (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Example: ensure default Member_Type_ID exists (set default to 'guest' if desired)
--- (Optional) set default member type to 'guest' if ID differs from 1:
-
--- Additional Feature
-DROP TABLE IF EXISTS Author_Journal, Institute, Journal, Issued_Journal, Author_Audio_Book, Audio_Book;
+-- (Optional) set default member type to 'guest' if ID differs from 1
 
 -- Author_Journal
 CREATE TABLE IF NOT EXISTS Author_Journal (
   Author_Journal_ID VARCHAR(10) PRIMARY KEY,
   Author_Journal_Name VARCHAR(255) NOT NULL,
-  Author_Journal_Contact VARCHAR(255) NOT NULL,
+  Author_Journal_Contact VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Institute
@@ -152,26 +152,20 @@ CREATE TABLE IF NOT EXISTS Journal (
   Journal_Publisher_ID VARCHAR(10) NOT NULL, -- FK -> Publisher.Publisher_ID
   Journal_Institute_ID VARCHAR(10), -- FK -> Institute.Institute_ID
   Journal_City VARCHAR(255),
-  Journal_Institute_City VARCHAR(255), -- FK -> Institute.Institute_City
   Journal_Index VARCHAR(255),
-  INDEX idx_journal_author (Journal_Author_ID),
-  INDEX idx_journal_publisher (Publisher_ID),
-  INDEX idx_journal_institute_id (Institute_ID),
-  INDEX idx_journal_institute_city (Institute_City),
-  CONSTRAINT fk_journal_author FOREIGN KEY (Journal_Author_ID)
+  INDEX idx_journal_author_id (Journal_Author_ID),
+  INDEX idx_journal_publisher_id (Journal_Publisher_ID),
+  INDEX idx_journal_institute_id (Journal_Institute_ID),
+  CONSTRAINT fk_journal_author_id FOREIGN KEY (Journal_Author_ID)
     REFERENCES Author_Journal(Author_Journal_ID)
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
-  CONSTRAINT fk_journal_publisher FOREIGN KEY (Journal_Publisher_ID)
+  CONSTRAINT fk_journal_publisher_id FOREIGN KEY (Journal_Publisher_ID)
     REFERENCES Publisher(Publisher_ID)
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
-  CONSTRAINT fk_journal_institute FOREIGN KEY (Journal_Institute_ID)
+  CONSTRAINT fk_journal_institute_id FOREIGN KEY (Journal_Institute_ID)
     REFERENCES Institute(Institute_ID)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT,
-  CONSTRAINT fk_journal_institute_city FOREIGN KEY (Journal_Institute_City)
-    REFERENCES Institute(Institute_City)
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -199,7 +193,7 @@ CREATE TABLE IF NOT EXISTS Issued_Journal (
 CREATE TABLE IF NOT EXISTS Author_Audio_Book (
   Author_Audio_Book_ID VARCHAR(10) PRIMARY KEY,
   Author_Audio_Book_Name VARCHAR(255) NOT NULL,
-  Author_Audio_Book_Contact VARCHAR(255) NOT NULL,
+  Author_Audio_Book_Contact VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Audio_Book

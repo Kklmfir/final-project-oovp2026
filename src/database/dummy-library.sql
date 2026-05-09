@@ -167,12 +167,12 @@ INSERT INTO Institute (Institute_ID, Institute_Name, Institute_Contact, Institut
     ('INST005', 'Universitas Gadjah Mada', 'info@ugm.ac.id', 'Yogyakarta');
 
 -- Journal
-INSERT INTO Journal (Journal_ID, Journal_Title, Journal_Year, Journal_Author_ID, Journal_Publisher_ID, Journal_Institute_ID, Journal_City, Journal_Institute_City, Journal_Index) VALUES
-    ('JRN001', 'Journal of Computer Science', 2020, 'AUTHJ001', 'PUB002', 'INST001', 'Miaw Island', 'Cikarang', 'Scopus 2'),
-    ('JRN002', 'International Journal of MIAW', 2021, 'AUTHJ002', 'PUB003', 'INST002', 'Mount Gede Pangrango', 'Cikarang', 'Sinta 2'),
-    ('JRN003', 'How To Be A Good Meong', 2019, 'AUTHJ003', 'PUB004', 'INST003', 'Museum Nasional', 'Jakarta', 'Sinta 5'),
-    ('JRN004', 'Best Solution for Icikiwir Upgrades', 2022, 'AUTHJ004', 'PUB005', 'INST004', 'Tangkuban Perahu', 'Bandung', 'Scopus 3'),
-    ('JRN005', 'Cybersecurity Using Banks Security', 2023, 'AUTHJ005', 'PUB006', 'INST005', 'Malioboro', 'Yogyakarta', 'Scopus 1');
+INSERT INTO Journal (Journal_ID, Journal_Title, Journal_Year, Journal_Author_ID, Journal_Publisher_ID, Journal_Institute_ID, Journal_City, Journal_Index) VALUES
+    ('JRN001', 'Journal of Computer Science', 2020, 'AUTHJ001', 'PUB002', 'INST001', 'Cikarang', 'Scopus 2'),
+    ('JRN002', 'International Journal of MIAW', 2021, 'AUTHJ002', 'PUB003', 'INST002', 'Cikarang', 'Sinta 2'),
+    ('JRN003', 'How To Be A Good Meong', 2019, 'AUTHJ003', 'PUB004', 'INST003', 'Jakarta', 'Sinta 5'),
+    ('JRN004', 'Best Solution for Icikiwir Upgrades', 2022, 'AUTHJ004', 'PUB005', 'INST004', 'Bandung', 'Scopus 3'),
+    ('JRN005', 'Cybersecurity Using Banks Security', 2023, 'AUTHJ005', 'PUB006', 'INST005', 'Yogyakarta', 'Scopus 1');
 
 -- Issued_Journal
 INSERT INTO Issued_Journal (Issued_Journal_ID, Journal_ID, Member_ID, Date_Issued, Date_Returned) VALUES
