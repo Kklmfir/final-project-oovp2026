@@ -1,7 +1,7 @@
 -- DUMMY DATA FINAL-PROJECT-OOVP2026
 
 -- ERASE OLD DATA (OPTIONAL - if tables exist)
-DELETE FROM Author;
+DELETE FROM Author_Book;
 DELETE FROM Book;
 DELETE FROM Category;
 DELETE FROM Issued_Book;
@@ -12,7 +12,7 @@ DELETE FROM Publisher;
 -- DISABLE FOREIGN KEY CHECKS TO AVOID CONSTRAINT ERRORS DURING INSERTION
 SET FOREIGN_KEY_CHECKS = 0;
 
--- 1. Book
+-- Book
 INSERT INTO Book (Book_ID, Book_Title, Book_Author_ID, Book_Category_ID, Book_Publisher_ID, Book_Year, ISBN, Book_Stock, Book_Status) VALUES
     ('BK001', 'Laskar Pelangi', 'AUTH001', 'CAT001', 'PUB001', 2005, '9789793062792', 6, 1), -- Available
     ('BK002', 'Sang Pemimpi', 'AUTH001', 'CAT001', 'PUB001', 2006, '9789791227209', 5, 1), -- Available
@@ -30,7 +30,7 @@ INSERT INTO Book (Book_ID, Book_Title, Book_Author_ID, Book_Category_ID, Book_Pu
     ('BK014', 'Filosofi Teras', 'AUTH010', 'CAT006', 'PUB006', 2018, '9786024125189', 6, 1), -- Available
     ('BK015', 'Belajar Dasar Python', 'AUTH007', 'CAT007', 'PUB010', 2023, '9786231234567', 2, 0); -- Borrowed
 
--- 2. Member_Type
+-- Member_Type
 INSERT INTO Member_Type (Member_Type_ID, Type_Name, Loan_Days, Loan_Limit, Fine_Per_Day) VALUES
     /*
     ('STD001', 7, 5, 0.50),
@@ -60,7 +60,7 @@ INSERT INTO Member_Type (Member_Type_ID, Type_Name, Loan_Days, Loan_Limit, Fine_
     ('GST004', 'Yesi N. Fitri', 7, 3, 1.00),
     ('GST005', 'Fattah Rohman', 7, 3, 1.00);
 
--- 3. Member
+-- Member
 INSERT INTO Member (Member_ID, Member_Name, Register_Date, Member_Type_ID, Identifier, Email, Phone) VALUES
     -- STUDENTS
     ('STU2026001', 'Keefi Almer Firdaus', '2026-04-01 08:15:00', 1, 'STD001', 'keefi.firdaus@student.president.ac.id', 081381110001),
@@ -81,28 +81,28 @@ INSERT INTO Member (Member_ID, Member_Name, Register_Date, Member_Type_ID, Ident
     ('GST2026004', 'Yesi N. Fitri', '2026-04-03 11:00:00', 3, 'GST004', 'yesi.fitri@gmail.com', 081381110024),
     ('GST2026005', 'Fattah Rohman', '2026-04-03 11:20:00', 3, 'GST005', 'fattah.rohman@yahoo.com', 081381110025);
 
--- 4. Issued_Book
+-- Issued_Book
 INSERT INTO Issued_Book (Issued_ID, Book_ID, Member_ID, Date_issued, Date_returned) VALUES
     -- STUDENTS
-    ('IS001', 'BK001', 'STU2026001', '2026-04-10 09:00:00', '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Clean Code"
-    ('IS002', 'BK002', 'STU2026002', '2026-04-11 10:00:00', '2026-04-17 11:00:00'), -- Alfairaz Putra Anantar borrows "The Clean Coder"
-    ('IS003', 'BK003', 'STU2026003', '2026-04-12 11:00:00', '2026-04-17 12:00:00'), -- Azizah Putri Susanto borrows "Code Complete"
-    ('IS004', 'BK004', 'STU2026004', '2026-04-13 12:00:00', '2026-04-20 13:00:00'), -- Yesi Nurfitriyani borrows "Refactoring"
-    ('IS005', 'BK005', 'STU2026005', '2026-04-14 13:00:00', '2026-04-19 14:00:00'), -- M Fattah Fadli Rohman Putra borrows "Design Patterns"
+    ('ISB001', 'BK001', 'STU2026001', '2026-04-10 09:00:00', '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Clean Code"
+    ('ISB002', 'BK002', 'STU2026002', '2026-04-11 10:00:00', '2026-04-17 11:00:00'), -- Alfairaz Putra Anantar borrows "The Clean Coder"
+    ('ISB003', 'BK003', 'STU2026003', '2026-04-12 11:00:00', '2026-04-17 12:00:00'), -- Azizah Putri Susanto borrows "Code Complete"
+    ('ISB004', 'BK004', 'STU2026004', '2026-04-13 12:00:00', '2026-04-20 13:00:00'), -- Yesi Nurfitriyani borrows "Refactoring"
+    ('ISB005', 'BK005', 'STU2026005', '2026-04-14 13:00:00', '2026-04-19 14:00:00'), -- M Fattah Fadli Rohman Putra borrows "Design Patterns"
     -- LECTURERS
-    ('IS006', 'BK006', 'LEC2026001', '2026-04-15 14:00:00', '2026-05-15 15:00:00'), -- Dr. Keefi A. Firdaus borrows "The Pragmatic Programmer"
-    ('IS007', 'BK007', 'LEC2026002', '2026-04-16 15:00:00', '2026-05-16 16:00:00'), -- Prof. Alfairaz P. Anantar borrows "Introduction to Algorithms"
-    ('IS008', 'BK008', 'LEC2026003', '2026-04-17 16:00:00', '2026-05-17 17:00:00'), -- Dr. Azizah P. Susanto borrows "Artificial Intelligence: A Modern Approach"
-    ('IS009', 'BK009', 'LEC2026004', '2026-04-18 17:00:00', '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "Deep Learning"
-    ('IS010', 'BK010', 'LEC2026005', '2026-04-19 18:00:00', '2026-05-19 19:00:00'), -- Prof. Fattah R. Rohman borrows "Computer Networking: A Top-Down Approach"
+    ('ISB006', 'BK006', 'LEC2026001', '2026-04-15 14:00:00', '2026-05-15 15:00:00'), -- Dr. Keefi A. Firdaus borrows "The Pragmatic Programmer"
+    ('ISB007', 'BK007', 'LEC2026002', '2026-04-16 15:00:00', '2026-05-16 16:00:00'), -- Prof. Alfairaz P. Anantar borrows "Introduction to Algorithms"
+    ('ISB008', 'BK008', 'LEC2026003', '2026-04-17 16:00:00', '2026-05-17 17:00:00'), -- Dr. Azizah P. Susanto borrows "Artificial Intelligence: A Modern Approach"
+    ('ISB009', 'BK009', 'LEC2026004', '2026-04-18 17:00:00', '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "Deep Learning"
+    ('ISB010', 'BK010', 'LEC2026005', '2026-04-19 18:00:00', '2026-05-19 19:00:00'), -- Prof. Fattah R. Rohman borrows "Computer Networking: A Top-Down Approach"
     -- GUESTS
-    ('IS011', 'BK011', 'GST2026003', '2026-04-20 19:00:00', '2026-04-27 20:00:00'), -- Keefi Almer borrows "Operating System Concepts"
-    ('IS012', 'BK012', 'GST2026005', '2026-04-21 20:00:00', '2026-04-28 21:00:00'), -- Alfairaz Putra borrows "Cybersecurity Essentials"
-    ('IS013', 'BK013', 'GST2026004', '2026-04-22 21:00:00', '2026-04-29 22:00:00'), -- Azizah Putri borrows "Think and Grow Rich"
-    ('IS014', 'BK014', 'GST2026001', '2026-04-23 22:00:00', '2026-04-30 23:00:00'), -- Yesi N. Fitri borrows "Linux Basics for Hackers"
-    ('IS015', 'BK015', 'GST2026002', '2026-04-24 23:00:00', '2026-05-01 08:00:00'); -- Fattah Rohman borrows "The Art of Computer Programming"
+    ('ISB011', 'BK011', 'GST2026003', '2026-04-20 19:00:00', '2026-04-27 20:00:00'), -- Keefi Almer borrows "Operating System Concepts"
+    ('ISB012', 'BK012', 'GST2026005', '2026-04-21 20:00:00', '2026-04-28 21:00:00'), -- Alfairaz Putra borrows "Cybersecurity Essentials"
+    ('ISB013', 'BK013', 'GST2026004', '2026-04-22 21:00:00', '2026-04-29 22:00:00'), -- Azizah Putri borrows "Think and Grow Rich"
+    ('ISB014', 'BK014', 'GST2026001', '2026-04-23 22:00:00', '2026-04-30 23:00:00'), -- Yesi N. Fitri borrows "Linux Basics for Hackers"
+    ('ISB015', 'BK015', 'GST2026002', '2026-04-24 23:00:00', '2026-05-01 08:00:00'); -- Fattah Rohman borrows "The Art of Computer Programming"
 
--- 5. Category
+-- Category
 INSERT INTO Category (Category_ID, Category_Name, Description) VALUES
     ('CAT001', 'Novels', 'Books that contain fictional stories, often with a narrative structure and character development.'),
     ('CAT002', 'Self Improvement', 'Books that provide guidance and advice on personal growth, motivation, and achieving success.'),
@@ -115,7 +115,7 @@ INSERT INTO Category (Category_ID, Category_Name, Description) VALUES
     ('CAT009', 'Education', 'Books that provide knowledge and skills for educational purposes.'),
     ('CAT010', 'Business', 'Books that cover topics related to business management, entrepreneurship, and economics.');
 
--- 6. Publisher
+-- Publisher
 INSERT INTO Publisher (Publisher_ID, Publisher_Name, Publisher_Contact) VALUES
     ('PUB001', 'Bentang Pustaka', 'cs@bentangpustaka.com'),
     ('PUB002', 'Gramedia Pustaka Utama', 'marketing@gpu.id'),
@@ -128,18 +128,83 @@ INSERT INTO Publisher (Publisher_ID, Publisher_Name, Publisher_Contact) VALUES
     ('PUB009', 'Lentera Dipantara', 'info@lentera-dipantara.or.id'),
     ('PUB010', 'Bukunesia', 'support@bukunesia.id');
 
--- 7. Author
-INSERT INTO Author (Author_ID, Author_Name, Author_Contact) VALUES    
-    ('AUTH001', 'Andrea Hirata', 'andrea.hirata@bentangpustaka.com'),
-    ('AUTH002', 'Pramoedya Ananta Toer', 'pramoedya@lentera-dipantara.or.id'),
-    ('AUTH003', 'Ahmad Fuadi', 'ahmad.fuadi@menaramedia.id'),
-    ('AUTH004', 'Habiburrahman El Shirazy', 'kangabik@shirazyinstitute.com'),
-    ('AUTH005', 'Tere Liye', 'admin@tereliye.com'),
-    ('AUTH006', 'Dewi Lestari', 'dee@truedee.com'),
-    ('AUTH007', 'Dian Nafi', 'dian.nafi@bukunesia.id'),
-    ('AUTH008', 'Dewi Lestari', 'dee@truedee.com'),
-    ('AUTH009', 'James Clear', 'team@jamesclear.com'),
-    ('AUTH010', 'Henry Manampiring', 'henry.manampiring@kompasgramedia.com');
+-- Author_Book
+INSERT INTO Author_Book (Author_Book_ID, Author_Book_Name, Author_Book_Contact) VALUES
+    ('AUTHB001', 'Andrea Hirata', 'andrea.hirata@bentangpustaka.com'),
+    ('AUTHB002', 'Pramoedya Ananta Toer', 'pramoedya@lentera-dipantara.or.id'),
+    ('AUTHB003', 'Ahmad Fuadi', 'ahmad.fuadi@menaramedia.id'),
+    ('AUTHB004', 'Habiburrahman El Shirazy', 'kangabik@shirazyinstitute.com'),
+    ('AUTHB005', 'Tere Liye', 'admin@tereliye.com'),
+    ('AUTHB006', 'Dewi Lestari', 'dee@truedee.com'),
+    ('AUTHB007', 'Dian Nafi', 'dian.nafi@bukunesia.id'),
+    ('AUTHB008', 'Dewi Lestari', 'dee@truedee.com'),
+    ('AUTHB009', 'James Clear', 'team@jamesclear.com'),
+    ('AUTHB010', 'Henry Manampiring', 'henry.manampiring@kompasgramedia.com');
+
+-- Additional Features
+DELETE FROM Author_Journal;
+DELETE FROM Institute;
+DELETE FROM Journal;
+DELETE FROM Issued_Journal;
+DELETE FROM Author_Audio_Book;
+DELETE FROM Audio_Book;
+DELETE FROM Issued_Audio_Book;
+
+--- Author_Journal
+INSERT INTO Author_Journal (Author_Journal_ID, Author_Journal_Name, Author_Journal_Contact) VALUES
+    ('AUTHJ001', 'Dr. Keefi A. Firdaus', 'keefi.firdaus@president.ac.id'),
+    ('AUTHJ002', 'Prof. Alfairaz P. Anantar', 'alfairaz.anantar@president.ac.id'),
+    ('AUTHJ003', 'Dr. Azizah P. Susanto', 'azizah.susanto@president.ac.id'),
+    ('AUTHJ004', 'Dr. Yesi N. Fitriyani', 'yesi.fitriyani@president.ac.id'),
+    ('AUTHJ005', 'Prof. Fattah R. Rohman', 'fattah.rohman@president.ac.id');
+
+-- Institute
+INSERT INTO Institute (Institute_ID, Institute_Name, Institute_Contact, Institute_City) VALUES
+    ('INST001', 'President University', 'info@president.ac.id', 'Cikarang'),
+    ('INST002', 'Institut Teknologi Sains Bandung', 'info@itsb.ac.id', 'Cikarang'),
+    ('INST003', 'Universitas Indonesia', 'info@ui.ac.id', 'Jakarta'),
+    ('INST004', 'Institut Teknologi Bandung', 'info@itb.ac.id', 'Bandung'),
+    ('INST005', 'Universitas Gadjah Mada', 'info@ugm.ac.id', 'Yogyakarta');
+
+-- Journal
+INSERT INTO Journal (Journal_ID, Journal_Title, Journal_Year, Journal_Author_ID, Journal_Publisher_ID, Journal_Institute_ID, Journal_City, Journal_Institute_City, Journal_Index) VALUES
+    ('JRN001', 'Journal of Computer Science', 2020, 'AUTHJ001', 'PUB002', 'INST001', 'Miaw Island', 'Cikarang', 'Scopus 2'),
+    ('JRN002', 'International Journal of MIAW', 2021, 'AUTHJ002', 'PUB003', 'INST002', 'Mount Gede Pangrango', 'Cikarang', 'Sinta 2'),
+    ('JRN003', 'How To Be A Good Meong', 2019, 'AUTHJ003', 'PUB004', 'INST003', 'Museum Nasional', 'Jakarta', 'Sinta 5'),
+    ('JRN004', 'Best Solution for Icikiwir Upgrades', 2022, 'AUTHJ004', 'PUB005', 'INST004', 'Tangkuban Perahu', 'Bandung', 'Scopus 3'),
+    ('JRN005', 'Cybersecurity Using Banks Security', 2023, 'AUTHJ005', 'PUB006', 'INST005', 'Malioboro', 'Yogyakarta', 'Scopus 1');
+
+-- Issued_Journal
+INSERT INTO Issued_Journal (Issued_Journal_ID, Journal_ID, Member_ID, Date_Issued, Date_Returned) VALUES
+    ('ISJ001', 'JRN001', 'STU2026001', '2026-04-10 09:00:00', '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Journal of Computer Science"
+    ('ISJ002', 'JRN002', 'LEC2026002', '2026-04-16 15:00:00', '2026-05-16 16:00:00'), -- Prof. Alfairaz P. Anantar borrows "International Journal of MIAW"
+    ('ISJ003', 'JRN003', 'GST2026003', '2026-04-20 19:00:00', '2026-04-27 20:00:00'), -- Keefi Almer borrows "How To Be A Good Meong"
+    ('ISJ004', 'JRN004', 'LEC2026004', '2026-04-18 17:00:00', '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "Best Solution for Icikiwir Upgrades"
+    ('ISJ005', 'JRN005', 'GST2026005', '2026-04-21 20:00:00', '2026-04-28 21:00:00'); -- Alfairaz Putra borrows "Cybersecurity Using Banks Security"
+
+-- Author_Audio_Book
+INSERT INTO Author_Audio_Book (Author_Audio_Book_ID, Author_Audio_Book_Name, Author_Audio_Book_Contact) VALUES
+    ('AUTHAB001', 'Miaw Miaw', 'Miaw@miaw.com'),
+    ('AUTHAB002', 'Meong Meong', 'Meong@meong.com'),
+    ('AUTHAB003', 'Purr Purr', 'Purr@purr.com'),
+    ('AUTHAB004', 'Icikiwir Icikiwir', 'Icikiwir@icikiwir.com'),
+    ('AUTHAB005', 'Kicau Mania', 'Kicau@kicau.com');
+
+-- Audio_Book
+INSERT INTO Audio_Book (Audio_Book_ID, Audio_Book_Title, Audio_Book_Author_ID, Audio_Book_Category_ID, Audio_Book_Publisher_ID, Audio_Book_Year, ISBN, Audio_Book_Duration, Audio_Book_Format, Audio_Book_Status) VALUES
+    ('ABK001', 'Sad Miaw Story', 'AUTHAB001', 'CAT001', 'PUB001', 2020, '9789793062792', 3600, 'MP3', 1), -- Available
+    ('ABK002', 'The Best Part of Meong', 'AUTHAB002', 'CAT002', 'PUB002', 2021, '9789791227209', 5400, 'AAC', 0), -- Borrowed
+    ('ABK003', 'How to Call Chicken', 'AUTHAB003', 'CAT003', 'PUB003', 2022, '9789799731234', 4200, 'WAV', 1), -- Available
+    ('ABK004', 'The Adventures of Icikiwir', 'AUTHAB004', 'CAT004', 'PUB004', 2023, '9789799731241', 4800, 'MP3', 1), -- Available
+    ('ABK005', 'The Secrets of Kicau Mania', 'AUTHAB005', 'CAT005', 'PUB005', 2024, '9789791227209', 3000, 'AAC', 0); -- Borrowed
+
+-- Issued_Audio_Book
+INSERT INTO Issued_Audio_Book (Issued_Audio_Book_ID, Audio_Book_ID, Member_ID, Date_Issued, Date_Returned) VALUES
+    ('ISAB001', 'ABK001', 'STU2026001', '2026-04-10 09:00:00', '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Sad Miaw Story"
+    ('ISAB002', 'ABK002', 'LEC2026002', '2026-04-16 15:00:00', '2026-05-16 16:00:00'), -- Prof. Alfairaz P. Anantar borrows "The Best Part of Meong"
+    ('ISAB003', 'ABK003', 'GST2026003', '2026-04-20 19:00:00', '2026-04-27 20:00:00'), -- Keefi Almer borrows "How to Call Chicken"
+    ('ISAB004', 'ABK004', 'LEC2026004', '2026-04-18 17:00:00', '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "The Adventures of Icikiwir"
+    ('ISAB005', 'ABK005', 'GST2026005', '2026-04-21 20:00:00', '2026-04-28 21:00:00'); -- Alfairaz Putra borrows "The Secrets of Kicau Mania"
 
 -- RE-ENABLE FOREIGN KEY CHECKS AFTER INSERTION
 SET FOREIGN_KEY_CHECKS = 1;
