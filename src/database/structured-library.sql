@@ -12,20 +12,20 @@
 -- \c "final-project-oovp2026";
 
 -- ERASE OLD TABLES (SAFE ORDER)
-DROP TABLE IF EXISTS Author, Book, Category, Issued_Book, Member, Member_Type, Publisher;
+DROP TABLE IF EXISTS Author_Book, Book, Category, Issued_Book, Member, Member_Type, Publisher;
+
+-- Author_Book
+CREATE TABLE IF NOT EXISTS Author_Book (
+  Author_Book_ID VARCHAR(10) PRIMARY KEY,
+  Author_Book_Name VARCHAR(255) NOT NULL UNIQUE,
+  Author_Book_Contact VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Category
 CREATE TABLE IF NOT EXISTS Category (
   Category_ID VARCHAR(10) PRIMARY KEY,
   Category_Name VARCHAR(255) NOT NULL UNIQUE,
   Description TEXT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Author
-CREATE TABLE IF NOT EXISTS Author (
-  Author_ID VARCHAR(10) PRIMARY KEY,
-  Author_Name VARCHAR(255) NOT NULL UNIQUE,
-  Author_Contact VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Publisher
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS Publisher (
 CREATE TABLE IF NOT EXISTS Book (
   Book_ID VARCHAR(10) PRIMARY KEY,
   Book_Title VARCHAR(255) NOT NULL,
-  Book_Author_ID VARCHAR(10) NOT NULL, -- FK -> Author.Author_ID
+  Book_Author_ID VARCHAR(10) NOT NULL, -- FK -> Author.Author_Book_ID
   Book_Category_ID VARCHAR(10) NOT NULL, -- FK -> Category.Category_ID
   Book_Publisher_ID VARCHAR(10), -- FK -> Publisher.Publisher_ID
   Book_Year INT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Book (
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
   CONSTRAINT fk_book_author FOREIGN KEY (Book_Author_ID)
-    REFERENCES Author(Author_ID)
+    REFERENCES Author(Author_Book_ID)
     ON UPDATE CASCADE
     ON DELETE RESTRICT,
   CONSTRAINT fk_book_publisher FOREIGN KEY (Book_Publisher_ID)
@@ -72,6 +72,19 @@ CREATE TABLE IF NOT EXISTS Member_Type (
   Loan_Limit INT NOT NULL DEFAULT 3,           -- max concurrent loans
   Fine_Per_Day DECIMAL(8,2) NOT NULL DEFAULT 0.50
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Example for student, lecturer, guest member types with different loan rules
+/*
+INSERT INTO Member_Type (Type_Name, Loan_Days, Loan_Limit, Fine_Per_Day)
+VALUES
+  ('student', 14, 5, 0.50),
+  ('lecturer', 30, 10, 0.25),
+  ('guest', 7, 2, 1.00)
+ON DUPLICATE KEY UPDATE
+  Loan_Days = VALUES(Loan_Days),
+  Loan_Limit = VALUES(Loan_Limit),
+  Fine_Per_Day = VALUES(Fine_Per_Day);
+*/
 
 -- Member
 CREATE TABLE IF NOT EXISTS Member (
@@ -109,18 +122,41 @@ CREATE TABLE IF NOT EXISTS Issued_Book (
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Example for student, lecturer, guest member types with different loan rules
-/*
-INSERT INTO Member_Type (Type_Name, Loan_Days, Loan_Limit, Fine_Per_Day)
-VALUES
-  ('student', 14, 5, 0.50),
-  ('lecturer', 30, 10, 0.25),
-  ('guest', 7, 2, 1.00)
-ON DUPLICATE KEY UPDATE
-  Loan_Days = VALUES(Loan_Days),
-  Loan_Limit = VALUES(Loan_Limit),
-  Fine_Per_Day = VALUES(Fine_Per_Day);
-*/
-
 -- Example: ensure default Member_Type_ID exists (set default to 'guest' if desired)
 -- (Optional) set default member type to 'guest' if ID differs from 1:
+
+-- Additional Feature
+DROP TABLE IF EXISTS Author_Journal, Journal
+
+-- Author_Journal
+CREATE TABLE IF NOT EXISTS Author_Journal (
+  Author_Journal_ID VARCHAR(10) PRIMARY KEY,
+  Author_Journal_Name VARCHAR(255) NOT NULL,
+  Author_Journal_Contact VARCHAR(255) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Institute
+CREATE TABLE IF NOT EXISTS Institute (
+  Institute_ID VARCHAR(10) PRIMARY KEY,
+  Institute_Name VARCHAR(255) NOT NULL,
+  Institute_Contact VARCHAR(255) NOT NULL,
+  Institute_City VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Journal
+CREATE TABLE IF NOT EXISTS Journal (
+  Journal_ID VARCHAR(10) PRIMARY KEY,
+  Journal_Title VARCHAR(255) NOT NULL,
+  Journal_Year INT NOT NULL,
+  Journal_Author_ID VARCHAR(10) NOT NULL, -- FK -> Author_Journal.Author_Journal_ID
+  Journal_Publisher_ID VARCHAR(10) NOT NULL, -- FK -> Publisher.Publisher_ID
+  Journal_Institute_ID VARCHAR(10), -- FK -> Institute.Institute_ID
+  Journal_City VARCHAR(255),
+  Journal_Institute_City VARCHAR(255), -- FK -> Institute.Institute_City
+  Journal_Index VARCHAR(255),
+  INDEX idx_journal_author (Journal_Author_ID),
+  INDEX idx_journal_publisher (Publisher_ID),
+  INDEX idx_journal_institute_id (Institute_ID),
+  INDEX idx_journal_institute_city (Institute_City),
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
