@@ -597,11 +597,13 @@ public class Page_Audio_Book extends javax.swing.JFrame {
 
         label16.setText("Borrow");
 
+        Borrow_Date.setForeground(new java.awt.Color(204, 204, 204));
         Borrow_Date.setText("dd/mm/yyyy");
         Borrow_Date.addActionListener(this::Borrow_DateActionPerformed);
 
         label17.setText("Return");
 
+        Return_Date.setForeground(new java.awt.Color(204, 204, 204));
         Return_Date.setText("dd/mm/yyyy");
         Return_Date.addActionListener(this::Return_DateActionPerformed);
 

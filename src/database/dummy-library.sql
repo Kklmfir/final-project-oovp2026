@@ -35,7 +35,7 @@ INSERT INTO Member_Type (Member_Type_ID, Type_Name, Loan_Days, Loan_Limit, Fine_
     /*
     ('STD001', 7, 5, 0.50),
     ('LEC001', 14, 10, 0.25),
-    ('GST001', 7, 2, 1.00);
+    ('GST001', 7, 3, 1.00);
     ON DUPLICATE KEY UPDATE
         Loan_Days = VALUES(Loan_Days),
         Loan_Limit = VALUES(Loan_Limit),

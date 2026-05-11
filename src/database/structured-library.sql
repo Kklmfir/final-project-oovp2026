@@ -53,7 +53,7 @@ INSERT INTO Member_Type (Type_Name, Loan_Days, Loan_Limit, Fine_Per_Day)
 VALUES
   ('student', 14, 5, 0.50),
   ('lecturer', 30, 10, 0.25),
-  ('guest', 7, 2, 1.00)
+  ('guest', 7, 3, 1.00)
 ON DUPLICATE KEY UPDATE
   Loan_Days = VALUES(Loan_Days),
   Loan_Limit = VALUES(Loan_Limit),
