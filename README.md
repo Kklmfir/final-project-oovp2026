@@ -282,29 +282,6 @@ Use carefully and coordinate with contributors.
 
 ---
 
-# Recommended `.gitignore`
-
-```gitignore
-# NetBeans
-nbproject/private/
-build/
-dist/
-
-# Java
-*.class
-*.jar
-
-# IDE
-.idea/
-*.iml
-
-# OS
-.DS_Store
-Thumbs.db
-```
-
----
-
 # Notes and Tips
 
 - Clone the repository into the NetBeans projects folder so NetBeans can recognize the project properly.
