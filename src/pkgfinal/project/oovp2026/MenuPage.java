@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package pkgfinal.project.oovp2026;
+package librarymanagementsystem;
 
 /**
  *
@@ -17,6 +17,7 @@ public class MenuPage extends javax.swing.JFrame {
      */
     public MenuPage() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -36,7 +37,6 @@ public class MenuPage extends javax.swing.JFrame {
         MemberButton = new java.awt.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(240, 320));
 
         MenuLabel.setFont(new java.awt.Font("Garamond", 1, 14)); // NOI18N
         MenuLabel.setText("Menu");
@@ -44,12 +44,18 @@ public class MenuPage extends javax.swing.JFrame {
         LogOutButton.setLabel("Log Out");
 
         BookButton.setLabel("Show the Books");
+        BookButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BookButtonMouseClicked(evt);
+            }
+        });
 
         JournalButton.setLabel("Show the Journals");
 
         AudioBookButton.setLabel("Show the Audio Books");
 
         MemberButton.setLabel("Show the Members");
+        MemberButton.addActionListener(this::MemberButtonActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,6 +105,18 @@ public class MenuPage extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BookButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BookButtonMouseClicked
+        Page_Book book = new Page_Book();
+    book.setVisible(true);
+    this.dispose(); // Menutup MenuPage
+    }//GEN-LAST:event_BookButtonMouseClicked
+
+    private void MemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MemberButtonActionPerformed
+        MemberForm member = new MemberForm();
+    member.setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_MemberButtonActionPerformed
 
     /**
      * @param args the command line arguments
