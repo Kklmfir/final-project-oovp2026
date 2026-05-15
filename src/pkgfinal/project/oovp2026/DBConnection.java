@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/**
- *
- * @author faira
- */
+
 package librarymanagementsystem;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 public class DBConnection {
@@ -22,7 +21,7 @@ public class DBConnection {
             Connection conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Koneksi Database Gagal: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Connection Failed: " + e.getMessage());
             return null;
         }
     }

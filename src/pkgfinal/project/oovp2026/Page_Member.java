@@ -146,6 +146,7 @@ public class Page_Member extends javax.swing.JFrame {
         jScrollPane4.setViewportView(Mem_Table);
 
         Add_Mem.setText("Add");
+        Add_Mem.addActionListener(this::Add_MemActionPerformed);
 
         Edit_Mem.setText("Edit");
 
@@ -379,6 +380,10 @@ public class Page_Member extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Add_MemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_MemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Add_MemActionPerformed
 
     /**
      * @param args the command line arguments

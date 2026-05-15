@@ -42,6 +42,7 @@ public class MenuPage extends javax.swing.JFrame {
         MenuLabel.setText("Menu");
 
         LogOutButton.setLabel("Log Out");
+        LogOutButton.addActionListener(this::LogOutButtonActionPerformed);
 
         BookButton.setLabel("Show the Books");
         BookButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -108,15 +109,19 @@ public class MenuPage extends javax.swing.JFrame {
 
     private void BookButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BookButtonMouseClicked
         Page_Book book = new Page_Book();
-    book.setVisible(true);
-    this.dispose(); // Menutup MenuPage
+        book.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BookButtonMouseClicked
 
     private void MemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MemberButtonActionPerformed
         MemberForm member = new MemberForm();
-    member.setVisible(true);
-    this.dispose();
+        member.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_MemberButtonActionPerformed
+
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LogOutButtonActionPerformed
 
     /**
      * @param args the command line arguments
