@@ -23,9 +23,16 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="TabMenu" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="MenuButton1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="LogOutButton1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="TabMenu" pref="580" max="32767" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -35,7 +42,12 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="TabMenu" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="MenuButton1" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="LogOutButton1" alignment="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -122,7 +134,7 @@
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="548" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                   </Group>
@@ -386,7 +398,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="Cat_Name" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="Cat_ID" pref="149" max="32767" attributes="0"/>
+                                  <Component id="Cat_ID" pref="141" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="296" max="-2" attributes="0"/>
                           </Group>
@@ -597,7 +609,7 @@
                               <Component id="jScrollPane5" min="-2" pref="540" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="27" max="32767" attributes="0"/>
+                      <EmptySpace pref="19" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -758,7 +770,7 @@
                               <Component id="jScrollPane4" min="-2" pref="540" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="27" max="32767" attributes="0"/>
+                      <EmptySpace pref="19" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -936,7 +948,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="27" max="32767" attributes="0"/>
+                      <EmptySpace pref="19" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1128,5 +1140,15 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="java.awt.Button" name="LogOutButton1">
+      <Properties>
+        <Property name="label" type="java.lang.String" value="Log Out"/>
+      </Properties>
+    </Component>
+    <Component class="java.awt.Button" name="MenuButton1">
+      <Properties>
+        <Property name="label" type="java.lang.String" value="Back to Menu"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

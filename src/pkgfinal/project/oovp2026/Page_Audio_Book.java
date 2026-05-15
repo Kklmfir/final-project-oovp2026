@@ -134,6 +134,7 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         LogOutButton.setLabel("Log Out");
+        LogOutButton.addActionListener(this::LogOutButtonActionPerformed);
 
         MenuButton.setLabel("Back to Menu");
 
@@ -768,6 +769,10 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     private void countDate(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_countDate
         // TODO add your handling code here:
     }//GEN-LAST:event_countDate
+
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LogOutButtonActionPerformed
 
     /**
      * @param args the command line arguments
