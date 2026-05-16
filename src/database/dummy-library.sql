@@ -82,25 +82,25 @@ INSERT INTO Member (Member_ID, Member_Name, Register_Date, Member_Type_ID, Ident
     ('GST2026005', 'Fattah Rohman', '2026-04-03 11:20:00', 3, 'GST005', 'fattah.rohman@yahoo.com', 081381110025);
 
 -- Issued_Book
-INSERT INTO Issued_Book (Issued_ID, Book_ID, Member_ID, Date_issued, Date_returned) VALUES
+INSERT INTO Issued_Book (Issued_ID, Book_ID, Member_ID, Date_issued, Due_Date, Actual_Return_Date, Date_returned) VALUES
     -- STUDENTS
-    ('ISB001', 'BK001', 'STU2026001', '2026-04-10 09:00:00', '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Clean Code"
-    ('ISB002', 'BK002', 'STU2026002', '2026-04-11 10:00:00', '2026-04-17 11:00:00'), -- Alfairaz Putra Anantar borrows "The Clean Coder"
-    ('ISB003', 'BK003', 'STU2026003', '2026-04-12 11:00:00', '2026-04-17 12:00:00'), -- Azizah Putri Susanto borrows "Code Complete"
-    ('ISB004', 'BK004', 'STU2026004', '2026-04-13 12:00:00', '2026-04-20 13:00:00'), -- Yesi Nurfitriyani borrows "Refactoring"
-    ('ISB005', 'BK005', 'STU2026005', '2026-04-14 13:00:00', '2026-04-19 14:00:00'), -- M Fattah Fadli Rohman Putra borrows "Design Patterns"
+    ('ISB001', 'BK001', 'STU2026001', '2026-04-10 09:00:00', NULL, NULL, '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Clean Code"
+    ('ISB002', 'BK002', 'STU2026002', '2026-04-11 10:00:00', NULL, NULL, '2026-04-17 11:00:00'), -- Alfairaz Putra Anantar borrows "The Clean Coder"
+    ('ISB003', 'BK003', 'STU2026003', '2026-04-12 11:00:00', NULL, NULL, '2026-04-17 12:00:00'), -- Azizah Putri Susanto borrows "Code Complete"
+    ('ISB004', 'BK004', 'STU2026004', '2026-04-13 12:00:00', NULL, NULL, '2026-04-20 13:00:00'), -- Yesi Nurfitriyani borrows "Refactoring"
+    ('ISB005', 'BK005', 'STU2026005', '2026-04-14 13:00:00', NULL, NULL, '2026-04-19 14:00:00'), -- M Fattah Fadli Rohman Putra borrows "Design Patterns"
     -- LECTURERS
-    ('ISB006', 'BK006', 'LEC2026001', '2026-04-15 14:00:00', '2026-05-15 15:00:00'), -- Dr. Keefi A. Firdaus borrows "The Pragmatic Programmer"
-    ('ISB007', 'BK007', 'LEC2026002', '2026-04-16 15:00:00', '2026-05-16 16:00:00'), -- Prof. Alfairaz P. Anantar borrows "Introduction to Algorithms"
-    ('ISB008', 'BK008', 'LEC2026003', '2026-04-17 16:00:00', '2026-05-17 17:00:00'), -- Dr. Azizah P. Susanto borrows "Artificial Intelligence: A Modern Approach"
-    ('ISB009', 'BK009', 'LEC2026004', '2026-04-18 17:00:00', '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "Deep Learning"
-    ('ISB010', 'BK010', 'LEC2026005', '2026-04-19 18:00:00', '2026-05-19 19:00:00'), -- Prof. Fattah R. Rohman borrows "Computer Networking: A Top-Down Approach"
+    ('ISB006', 'BK006', 'LEC2026001', '2026-04-15 14:00:00', NULL, NULL, '2026-05-15 15:00:00'), -- Dr. Keefi A. Firdaus borrows "The Pragmatic Programmer"
+    ('ISB007', 'BK007', 'LEC2026002', '2026-04-16 15:00:00', NULL, NULL, '2026-05-16 16:00:00'), -- Prof. Alfairaz P. Anantar borrows "Introduction to Algorithms"
+    ('ISB008', 'BK008', 'LEC2026003', '2026-04-17 16:00:00', NULL, NULL, '2026-05-17 17:00:00'), -- Dr. Azizah P. Susanto borrows "Artificial Intelligence: A Modern Approach"
+    ('ISB009', 'BK009', 'LEC2026004', '2026-04-18 17:00:00', NULL, NULL, '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "Deep Learning"
+    ('ISB010', 'BK010', 'LEC2026005', '2026-04-19 18:00:00', NULL, NULL, '2026-05-19 19:00:00'), -- Prof. Fattah R. Rohman borrows "Computer Networking: A Top-Down Approach"
     -- GUESTS
-    ('ISB011', 'BK011', 'GST2026003', '2026-04-20 19:00:00', '2026-04-27 20:00:00'), -- Keefi Almer borrows "Operating System Concepts"
-    ('ISB012', 'BK012', 'GST2026005', '2026-04-21 20:00:00', '2026-04-28 21:00:00'), -- Alfairaz Putra borrows "Cybersecurity Essentials"
-    ('ISB013', 'BK013', 'GST2026004', '2026-04-22 21:00:00', '2026-04-29 22:00:00'), -- Azizah Putri borrows "Think and Grow Rich"
-    ('ISB014', 'BK014', 'GST2026001', '2026-04-23 22:00:00', '2026-04-30 23:00:00'), -- Yesi N. Fitri borrows "Linux Basics for Hackers"
-    ('ISB015', 'BK015', 'GST2026002', '2026-04-24 23:00:00', '2026-05-01 08:00:00'); -- Fattah Rohman borrows "The Art of Computer Programming"
+    ('ISB011', 'BK011', 'GST2026003', '2026-04-20 19:00:00', NULL, NULL, '2026-04-27 20:00:00'), -- Keefi Almer borrows "Operating System Concepts"
+    ('ISB012', 'BK012', 'GST2026005', '2026-04-21 20:00:00', NULL, NULL, '2026-04-28 21:00:00'), -- Alfairaz Putra borrows "Cybersecurity Essentials"
+    ('ISB013', 'BK013', 'GST2026004', '2026-04-22 21:00:00', NULL, NULL, '2026-04-29 22:00:00'), -- Azizah Putri borrows "Think and Grow Rich"
+    ('ISB014', 'BK014', 'GST2026001', '2026-04-23 22:00:00', NULL, NULL, '2026-04-30 23:00:00'), -- Yesi N. Fitri borrows "Linux Basics for Hackers"
+    ('ISB015', 'BK015', 'GST2026002', '2026-04-24 23:00:00', NULL, NULL, '2026-05-01 08:00:00'); -- Fattah Rohman borrows "The Art of Computer Programming"
 
 -- Category
 INSERT INTO Category (Category_ID, Category_Name, Description) VALUES

@@ -112,6 +112,8 @@ CREATE TABLE IF NOT EXISTS Issued_Book (
   Book_ID VARCHAR(10) NOT NULL, -- FK -> Book.Book_ID
   Member_ID VARCHAR(10) NOT NULL, -- FK -> Member.Member_ID
   Date_issued DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Due_Date DATETIME NULL,
+  Actual_Return_Date DATETIME NULL,
   Date_returned DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_issued_book (Book_ID),
   INDEX idx_issued_member (Member_ID),

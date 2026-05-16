@@ -358,6 +358,8 @@
                                           <Component id="MT_Loan_Limit" alignment="0" max="32767" attributes="0"/>
                                           <Component id="MT_Fine" alignment="0" pref="120" max="32767" attributes="0"/>
                                       </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="label9" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -399,20 +401,25 @@
                           <Component id="MT_Loan_Limit" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="label8" min="-2" max="-2" attributes="0"/>
-                          <Component id="MT_Fine" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="Add_MT" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="Edit_MT" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="Refresh_MT" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="Delete_MT" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="label8" min="-2" max="-2" attributes="0"/>
+                                  <Component id="MT_Fine" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="Add_MT" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="Edit_MT" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="Refresh_MT" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="Delete_MT" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jScrollPane5" min="-2" pref="372" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="label9" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jScrollPane5" min="-2" pref="372" max="-2" attributes="0"/>
-                      <EmptySpace pref="17" max="32767" attributes="0"/>
+                      <EmptySpace pref="15" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -482,6 +489,11 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
+            </Component>
+            <Component class="java.awt.Label" name="label9">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Rp 10.000/day"/>
+              </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane5">
               <AuxValues>
