@@ -11,10 +11,13 @@
 -- CREATE DATABASE "final-project-oovp2026";
 -- \c "final-project-oovp2026";
 
+-- DISABLE FOREIGN KEY CHECKS TO AVOID CONSTRAINT ERRORS DURING INSERTION
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- Additional Feature
 DROP TABLE IF EXISTS Author_Journal, Institute, Journal, Issued_Journal, Author_Audio_Book, Audio_Book;
 
--- ERASE OLD TABLES (SAFE ORDER)
+-- ERASE OLD TABLES
 DROP TABLE IF EXISTS Issued_Book, Member, Member_Type, Book, Author_Book, Category, Publisher;
 
 -- Author_Book
@@ -246,3 +249,6 @@ CREATE TABLE IF NOT EXISTS Issued_Audio_Book (
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- RE-ENABLE FOREIGN KEY CHECKS AFTER INSERTION
+SET FOREIGN_KEY_CHECKS = 1;
