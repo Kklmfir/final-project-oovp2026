@@ -3,47 +3,401 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pkgfinal.project.oovp2026;
+
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+import net.proteanit.sql.DbUtils;
+
+/**
+ * Class: Page_Member (JFrame)
+ */
 public class Page_Member extends javax.swing.JFrame {
-    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Member.class.getName());
+    private static final int FINE_BASE_RP_PER_DAY = 10_000; // Base fine in Rp per day
+    private menuPage parent = null;
+    private final SimpleDateFormat uiDateFormat = new SimpleDateFormat("dd/MM/yyyy"); // For displaying dates in the UI
+    private final DecimalFormat moneyFormat = new DecimalFormat("#,##0"); // For formatting money values
 
     /**
-     * Creates new form Page_Book
+     * Constructor: Page_Member()
      */
     public Page_Member() {
         initComponents();
-        
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat calFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Borrow_Date.setText(calFormat.format(cal.getTime()));
+        initRuntimeLogic();
     }
     
-    private void countDate() {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Calendar cal = Calendar.getInstance();
+    /**
+     * Constructor overload: Page_Member(menuPage parent)
+     * @param parent The parent menu page to return to when navigating back
+     */
+    public Page_Member(menuPage parent) {
+        this.parent = parent;
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window
+    }
 
-            // Get the date from jTextField1
-            cal.setTime(sdf.parse(Borrow_Date.getText()));
+    /**
+     * Method: initRuntimeLogic()
+     * Description: Initialize runtime logic, set date default, load table, and auto calc fine
+     */
+    private void initRuntimeLogic() {
+        Calendar cal = Calendar.getInstance();
+        Mem_Reg_Date.setText(uiDateFormat.format(cal.getTime()));
+        reloadAllData();
+        
+        Mem_Member_Type.addActionListener(this::MemMemberTypeChanged); // action listener for member type change to recalculate return date
+        MemMemberTypeChanged(null); // set initial return date based on default member type
 
-            // Logic duration from Borrow_Member (JComboBox)
-            String selectedMember = Borrow_Member.getSelectedItem().toString();
-            int duration = 7; // Default
-            
-            if (selectedMember.contains("Lect") || selectedMember.contains("Std") || selectedMember.contains("Gst")) {
-                duration = 14;
+        MenuButton.addActionListener(this::MenuButtonActionPerformed); // action listener for menu button to navigate back to menu
+        LogOutButton.addActionListener(this::LogOutButtonActionPerformed); // action listener for log out button to navigate back to login
+    }
+
+    /**
+     * Method: reloadAllData()
+     * Description: Reload all data for members and member types
+     */
+    private void reloadAllData() {
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                loadMemberTypeComboFromDb();
+                loadMemberTable();
+                loadMemberTypeTable();
+                return null;
+            }
+            @Override
+            protected void done() {
+                try {
+                    get(); // to catch any exceptions from doInBackground
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "Error while loading data: ", e);
+                    JOptionPane.showMessageDialog(Page_Member.this, "Error while loading data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }.execute();
+    }
+    
+    /* 
+     * Method: MemMemberTypeChanged(ActionEvent evt)
+     * Description: Recalculate return date when member type changes
+     */
+    private void loadMemberTypeComboFromDb() throws SQLException {
+        String sql = "SELECT Member_Type_ID, Type_Name FROM Member_Type ORDER BY Member_Type_ID";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            Mem_Member_Type.removeAllItems();
+            while (rs.next()) {
+                String id = rs.getString("Member_Type_ID");
+                String name = rs.getString("Type_Name");
+                Mem_Member_Type.addItem(id + "-" + name);
+            }
+        }
+    }
+
+    /**
+     * Method: loadMemberTable()
+     * Description: Load member data into the member table
+     */
+    private void loadMemberTable() throws SQLException {
+        String sql =
+            "SELECT m.Member_ID, m.Member_Name, m.Register_Date, mt.Type_Name, m.Identifier, m.Email, m.Phone " +
+            "FROM Member m " +
+            "JOIN Member_Type mt ON m.Member_Type_ID = mt.Member_Type_ID " +
+            "ORDER BY m.Member_ID";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            Mem_Table.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+    }
+
+    /**
+     * Method: loadMemberTypeTable()
+     * Description: Load member type data into the member type table
+     */
+    private void loadMemberTypeTable() throws SQLException {
+        String sql =
+            "SELECT Member_Type_ID, Type_Name, Loan_Days, Loan_Limit, Fine_Per_Day " +
+            "FROM Member_Type ORDER BY Member_Type_ID";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            MT_Table.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+    }
+
+    /**
+     *  Method: nextMemberId()
+     * Description: autoID generater for Member_ID
+     */
+    private String nextMemberId() throws SQLException {
+        String sql = "SELECT MAX(Member_ID) AS MaxID FROM Member";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                String maxId = rs.getString("MaxID");
+                if (maxId == null) return "M001";
+                int n = Integer.parseInt(maxId.substring(1)) + 1;
+                return String.format("M%03d", n);
+            }
+            return "M001";
+        }
+    }
+
+    /**
+     * Method: nextMemberTypeId()
+     * Description: autoID generater for Member_Type_ID
+     */
+    private String nextMemberTypeId() throws SQLException {
+        String sql = "SELECT MAX(Member_Type_ID) AS MaxID FROM Member_Type";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                String maxId = rs.getString("MaxID");
+                if (maxId == null) return "MT001";
+                int n = Integer.parseInt(maxId.substring(2)) + 1;
+                return String.format("MT%03d", n);
+            }
+            return "MT001";
+        }
+    }
+
+    /**
+     * Method: MemMemberTypeChanged(ActionEvent)
+     * Description: Recalculate return date based on member type selection
+     */
+    private void MemMemberTypeChanged(ActionEvent evt) {
+        Object selected = Mem_Member_Type.getSelectedItem();
+        if (selected == null) return;
+
+        String item = selected.toString(); // format: ID-Name
+        String memberTypeId = item.split("-")[0].trim();
+
+        new SwingWorker<Void, Void>() {
+            double finePerDayRatio = 0.0;
+            int finePerDayRp = 0;
+
+            @Override
+            protected Void doInBackground() throws Exception {
+                String sql = "SELECT Fine_Per_Day FROM Member_Type WHERE Member_Type_ID = ?";
+                try (Connection conn = DBConnection.getConnection();
+                     PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setString(1, memberTypeId);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            finePerDayRatio = rs.getDouble("Fine_Per_Day");
+                            finePerDayRp = (int) Math.round(finePerDayRatio * FINE_BASE_RP_PER_DAY);
+                        }
+                    }
+                }
+                return null;
             }
 
-            cal.add(Calendar.DAY_OF_MONTH, duration);
+            @Override
+            protected void done() {
+                try {
+                    get();
+                    label9.setText("Rp " + moneyFormat.format(finePerDayRp) + "/day (rate=" + finePerDayRatio + ")");
+                } catch (Exception ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                    label9.setText("Rp - /day");
+                }
+            }
+        }.execute();
+    }
 
-            String returnDate = sdf.format(cal.getTime());
-            label17.setText("Return Date: " + returnDate);
+    /**
+     * Method: Add_MemActionPerformed(ActionEvent)
+     * Description: Handle add member button click, validate input, and insert new member into database
+     */
+    private void Add_MemActionPerformed(java.awt.event.ActionEvent evt) {
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                String memberId = nextMemberId();
+                String name = Mem_Name.getText().trim();
+                String regDateStr = Mem_Reg_Date.getText().trim();
+                String memberTypeItem = (String) Mem_Member_Type.getSelectedItem();
+                String memberTypeId = memberTypeItem != null ? memberTypeItem.split("-")[0].trim() : null;
 
-        } catch (Exception e) {
-            System.err.println("Error while counting days: " + e.getMessage());
+                String identifier = (String) Mem_Identifier.getSelectedItem();
+                String email = Mem_Email.getText().trim();
+                String phone = Mem_Phone.getText().trim();
+
+                if (name.isEmpty() || memberTypeId == null || memberTypeId.isEmpty()) {
+                    throw new IllegalArgumentException("Name and Member Type must be filled.");
+                }
+
+                // parse dd/MM/yyyy -> DATETIME (set time 00:00:00)
+                java.util.Date parsed = uiDateFormat.parse(regDateStr);
+                java.sql.Timestamp regTs = new java.sql.Timestamp(parsed.getTime());
+
+                String sql =
+                    "INSERT INTO Member (Member_ID, Member_Name, Register_Date, Member_Type_ID, Identifier, Email, Phone) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+                try (Connection conn = DBConnection.getConnection();
+                     PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setString(1, memberId);
+                    ps.setString(2, name);
+                    ps.setTimestamp(3, regTs);
+                    ps.setString(4, memberTypeId);
+                    ps.setString(5, identifier);
+                    ps.setString(6, email.isEmpty() ? null : email);
+                    ps.setString(7, phone.isEmpty() ? null : phone);
+                    ps.executeUpdate();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get();
+                    JOptionPane.showMessageDialog(Page_Member.this, "Member successfully added.");
+                    clearMemberInputs();
+                    reloadAllData();
+                } catch (Exception ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(Page_Member.this, "Failed to add member: " + ex.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    /**
+     * Method: clearMemberInputs()
+     * Description: Clear input fields after adding a member
+     */
+    private void clearMemberInputs() {
+        Mem_Name.setText("");
+        Calendar cal = Calendar.getInstance();
+        Mem_Reg_Date.setText(uiDateFormat.format(cal.getTime()));
+        if (Mem_Member_Type.getItemCount() > 0) Mem_Member_Type.setSelectedIndex(0);
+        if (Mem_Identifier.getItemCount() > 0) Mem_Identifier.setSelectedIndex(0);
+        Mem_Email.setText("");
+        Mem_Phone.setText("");
+    }
+
+    /**
+     * Method: Add_MemActionPerformed(ActionEvent evt)
+     * Description: Handle add member button click, validate input, and insert new member into database
+     */
+    private void Add_MTActionPerformed(java.awt.event.ActionEvent evt) {
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                String mtId = nextMemberTypeId();
+                String typeName = MT_Name.getText().trim();
+                if (typeName.isEmpty()) throw new IllegalArgumentException("Type Name must be filled.");
+
+                int loanDays = parseLoanDays((String) MT_Loan_Day.getSelectedItem());
+                int loanLimit = parseLoanLimit((String) MT_Loan_Limit.getSelectedItem());
+                double fineRatio = parseFineRatio((String) MT_Fine.getSelectedItem());
+
+                String sql =
+                    "INSERT INTO Member_Type (Member_Type_ID, Type_Name, Loan_Days, Loan_Limit, Fine_Per_Day) " +
+                    "VALUES (?, ?, ?, ?, ?)";
+
+                try (Connection conn = DBConnection.getConnection();
+                     PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setString(1, mtId);
+                    ps.setString(2, typeName);
+                    ps.setInt(3, loanDays);
+                    ps.setInt(4, loanLimit);
+                    ps.setDouble(5, fineRatio);
+                    ps.executeUpdate();
+                }
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get();
+                    JOptionPane.showMessageDialog(Page_Member.this, "Member Type successfully added.");
+                    clearMemberTypeInputs();
+                    reloadAllData(); // reload combo & table
+                } catch (Exception ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(Page_Member.this, "Failed to add Member Type: " + ex.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    private int parseLoanDays(String s) {
+        if (s == null) return 14;
+        return Integer.parseInt(s.trim().split(" ")[0]); // from "7 Days" into 7
+    }
+
+    private int parseLoanLimit(String s) {
+        if (s == null) return 3;
+        return Integer.parseInt(s.trim().split(" ")[0]); // from "3 Books" into 3
+    }
+
+    private double parseFineRatio(String s) {
+        if (s == null) return 0.5;
+        String x = s.trim().replace("%", ""); // from "0.50%" into "0.50"
+        return Double.parseDouble(x);
+    }
+
+    /**
+     * Method: clearMemberTypeInputs()
+     * Description: Clear input tab Member Type.
+     */
+    private void clearMemberTypeInputs() {
+        MT_Name.setText("");
+        if (MT_Loan_Day.getItemCount() > 0) MT_Loan_Day.setSelectedIndex(0);
+        if (MT_Loan_Limit.getItemCount() > 0) MT_Loan_Limit.setSelectedIndex(0);
+        if (MT_Fine.getItemCount() > 0) MT_Fine.setSelectedIndex(0);
+    }
+
+    /**
+     * Method: MenuButtonActionPerformed(ActionEvent)
+     * Description: Handle menu button click to navigate back to menu page
+     */
+    private void MenuButtonActionPerformed(ActionEvent evt) {
+        if (parent != null) {
+            parent.setLocationRelativeTo(null);
+            parent.setVisible(true);
+        } else {
+            MenuPage mp = new MenuPage();
+            mp.setLocationRelativeTo(null);
+            mp.setVisible(true);
         }
+        dispose(); // close current window
+    }
+
+    /**
+     * Method: LogOutButtonActionPerformed(ActionEvent)
+     * Description: Handle log out button click to navigate back to login page
+     */
+    private void LogOutButtonActionPerformed(ActionEvent evt) {
+        LoginPage lp = new LoginPage();
+        lp.setLocationRelativeTo(null);
+        lp.setVisible(true);
+
+        if (parent != null) parent.dispose(); // close parent menu if exists
+        dispose();
     }
 
     /**
@@ -52,9 +406,7 @@ public class Page_Member extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         LogOutButton = new java.awt.Button();
         MenuButton = new java.awt.Button();
         TabMenu = new javax.swing.JTabbedPane();
@@ -86,6 +438,7 @@ public class Page_Member extends javax.swing.JFrame {
         MT_Loan_Limit = new javax.swing.JComboBox<>();
         label8 = new java.awt.Label();
         MT_Fine = new javax.swing.JComboBox<>();
+        label9 = new java.awt.Label();
         jScrollPane5 = new javax.swing.JScrollPane();
         MT_Table = new javax.swing.JTable();
         Add_MT = new javax.swing.JButton();
@@ -151,95 +504,10 @@ public class Page_Member extends javax.swing.JFrame {
         Edit_Mem.setText("Edit");
 
         Refresh_Mem.setText("Refresh");
+        Refresh_Mem.addActionListener(e -> { clearMemberInputs(); reloadAllData(); });
 
         Delete_Mem.setForeground(new java.awt.Color(204, 0, 51));
         Delete_Mem.setText("Delete");
-
-        javax.swing.GroupLayout MemberLayout = new javax.swing.GroupLayout(Member);
-        Member.setLayout(MemberLayout);
-        MemberLayout.setHorizontalGroup(
-            MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MemberLayout.createSequentialGroup()
-                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MemberLayout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Mem_Reg_Date, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                            .addComponent(Mem_Name, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                            .addComponent(Mem_Member_Type, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(39, 39, 39)
-                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(MemberLayout.createSequentialGroup()
-                                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(Mem_Email, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                    .addComponent(Mem_Phone)
-                                    .addComponent(Mem_Identifier, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(MemberLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MemberLayout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(Add_Mem)
-                        .addGap(42, 42, 42)
-                        .addComponent(Edit_Mem)
-                        .addGap(47, 47, 47)
-                        .addComponent(Refresh_Mem)
-                        .addGap(42, 42, 42)
-                        .addComponent(Delete_Mem)))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-        MemberLayout.setVerticalGroup(
-            MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MemberLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(MemberLayout.createSequentialGroup()
-                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Mem_Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(label11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Mem_Reg_Date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(MemberLayout.createSequentialGroup()
-                        .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MemberLayout.createSequentialGroup()
-                        .addComponent(Mem_Identifier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(Mem_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Mem_Member_Type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(label4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MemberLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(Mem_Phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(33, 33, 33)
-                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Add_Mem)
-                    .addComponent(Edit_Mem)
-                    .addComponent(Refresh_Mem)
-                    .addComponent(Delete_Mem))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-
-        TabMenu.addTab("Member", Member);
 
         label5.setText("Name");
 
@@ -256,6 +524,8 @@ public class Page_Member extends javax.swing.JFrame {
 
         MT_Fine.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0.25%", "0.50%", "1.00%" }));
         MT_Fine.setToolTipText("");
+
+        label9.setText("Rp 10.000/day");
 
         MT_Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -277,77 +547,151 @@ public class Page_Member extends javax.swing.JFrame {
         jScrollPane5.setViewportView(MT_Table);
 
         Add_MT.setText("Add");
+        Add_MT.addActionListener(this::Add_MTActionPerformed);
 
         Edit_MT.setText("Edit");
 
         Refresh_MT.setText("Refresh");
+        Refresh_MT.addActionListener(e -> { clearMemberTypeInputs(); reloadAllData(); });
 
         Delete_MT.setForeground(new java.awt.Color(204, 0, 51));
         Delete_MT.setText("Delete");
 
-        javax.swing.GroupLayout Member_TypeLayout = new javax.swing.GroupLayout(Member_Type);
-        Member_Type.setLayout(Member_TypeLayout);
-        Member_TypeLayout.setHorizontalGroup(
-            Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Member_TypeLayout.createSequentialGroup()
-                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(Member_TypeLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(Member_TypeLayout.createSequentialGroup()
-                                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(label8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(MT_Name)
-                                    .addComponent(MT_Loan_Day, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(MT_Loan_Limit, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(MT_Fine, 0, 120, Short.MAX_VALUE)))))
-                    .addGroup(Member_TypeLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(Member_TypeLayout.createSequentialGroup()
-                        .addGap(73, 73, 73)
-                        .addComponent(Add_MT)
-                        .addGap(42, 42, 42)
-                        .addComponent(Edit_MT)
-                        .addGap(47, 47, 47)
-                        .addComponent(Refresh_MT)
-                        .addGap(42, 42, 42)
-                        .addComponent(Delete_MT)))
-                .addContainerGap(19, Short.MAX_VALUE))
+        javax.swing.GroupLayout MemberLayout = new javax.swing.GroupLayout(Member);
+        Member.setLayout(MemberLayout);
+        MemberLayout.setHorizontalGroup(
+            MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MemberLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                    .addGroup(MemberLayout.createSequentialGroup()
+                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label11, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Mem_Name)
+                            .addComponent(Mem_Reg_Date)
+                            .addComponent(Mem_Member_Type, 0, 180, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Mem_Identifier, 0, 180, Short.MAX_VALUE)
+                            .addComponent(Mem_Email)
+                            .addComponent(Mem_Phone)))
+                    .addGroup(MemberLayout.createSequentialGroup()
+                        .addComponent(Add_Mem)
+                        .addGap(12, 12, 12)
+                        .addComponent(Edit_Mem)
+                        .addGap(12, 12, 12)
+                        .addComponent(Refresh_Mem)
+                        .addGap(12, 12, 12)
+                        .addComponent(Delete_Mem)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        Member_TypeLayout.setVerticalGroup(
-            Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Member_TypeLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        MemberLayout.setVerticalGroup(
+            MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MemberLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mem_Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mem_Identifier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mem_Reg_Date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mem_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mem_Member_Type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mem_Phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(MemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Add_Mem)
+                    .addComponent(Edit_Mem)
+                    .addComponent(Refresh_Mem)
+                    .addComponent(Delete_Mem))
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        TabMenu.addTab("Member", Member);
+
+        javax.swing.GroupLayout MemberTypeLayout = new javax.swing.GroupLayout(Member_Type);
+        Member_Type.setLayout(MemberTypeLayout);
+        MemberTypeLayout.setHorizontalGroup(
+            MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MemberTypeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                    .addGroup(MemberTypeLayout.createSequentialGroup()
+                        .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label8, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(MT_Name)
+                            .addComponent(MT_Loan_Day, 0, 180, Short.MAX_VALUE)
+                            .addComponent(MT_Loan_Limit, 0, 180, Short.MAX_VALUE)
+                            .addComponent(MT_Fine, 0, 180, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(label9, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE))
+                    .addGroup(MemberTypeLayout.createSequentialGroup()
+                        .addComponent(Add_MT)
+                        .addGap(12, 12, 12)
+                        .addComponent(Edit_MT)
+                        .addGap(12, 12, 12)
+                        .addComponent(Refresh_MT)
+                        .addGap(12, 12, 12)
+                        .addComponent(Delete_MT)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        MemberTypeLayout.setVerticalGroup(
+            MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MemberTypeLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MT_Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(MT_Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MT_Loan_Day, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(8, 8, 8)
+                .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MT_Loan_Limit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(8, 8, 8)
+                .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MT_Fine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(Member_TypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(14, 14, 14)
+                .addGroup(MemberTypeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Add_MT)
                     .addComponent(Edit_MT)
                     .addComponent(Refresh_MT)
                     .addComponent(Delete_MT))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         TabMenu.addTab("Member Type", Member_Type);
@@ -356,9 +700,9 @@ public class Page_Member extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(TabMenu)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(MenuButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -368,7 +712,7 @@ public class Page_Member extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(TabMenu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -379,18 +723,17 @@ public class Page_Member extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void Add_MemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_MemActionPerformed
+    private void Add_MemActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }//GEN-LAST:event_Add_MemActionPerformed
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -404,13 +747,11 @@ public class Page_Member extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Page_Member().setVisible(true));
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Add_MT;
     private javax.swing.JButton Add_Mem;
     private javax.swing.JButton Delete_MT;
@@ -448,5 +789,5 @@ public class Page_Member extends javax.swing.JFrame {
     private java.awt.Label label6;
     private java.awt.Label label7;
     private java.awt.Label label8;
-    // End of variables declaration//GEN-END:variables
+    private java.awt.Label label9;
 }

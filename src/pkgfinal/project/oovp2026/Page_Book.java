@@ -17,6 +17,9 @@ import com.toedter.calendar.JDateChooser;
 import pkgfinal.project.oovp2026.MenuPage;
 import pkgfinal.project.oovp2026.LoginPage;
 
+/*
+ * Class: Page_Book (JFrame)
+ */
 public class Page_Book extends javax.swing.JFrame {
     Connection conn = DBConnection.connect();
     private MenuPage parent = null;
@@ -1027,7 +1030,7 @@ public class Page_Book extends javax.swing.JFrame {
         pst.setString(8, "Available"); 
 
         pst.executeUpdate();
-        JOptionPane.showMessageDialog(null, "Data Buku Berhasil Ditambahkan!");
+        JOptionPane.showMessageDialog(null, "Book Successfully Added!");
         
         loadBookTable();
         
@@ -1040,7 +1043,7 @@ public class Page_Book extends javax.swing.JFrame {
         
         autoIDBook();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Gagal Menambah Data Buku: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Failed to Add Book Data: " + e.getMessage());
         }
         
     } event_Add_BookActionPerformed
@@ -1065,7 +1068,7 @@ public class Page_Book extends javax.swing.JFrame {
             loadCatTable();
             Cat_Name.setText("");
             Cat_Description.setText("");
-        } catch (Exception e) { JOptionPane.showMessageDialog(null, e.getMessage()); }
+        } catch (Exception e) { JOptionPane.showMessageDialog(null, "Failed to Add Category Data: " + e.getMessage()); }
     } event_Add_CatActionPerformed
 
     private void Edit_BookActionPerformed(java.awt.event.ActionEvent evt) { event_Edit_BookActionPerformed
@@ -1501,7 +1504,10 @@ public class Page_Book extends javax.swing.JFrame {
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                // Using Nimbus for better look and feel, fallback to default if not available
+                /* Set the Nimbus look and feel */
+                /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+                * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+                */
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
