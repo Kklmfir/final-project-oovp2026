@@ -10,9 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class FinalProjectOovp2026 {
-    private Connection conn;
-    private Statement statement;
-    private ResultSet res;
     private void connect() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
