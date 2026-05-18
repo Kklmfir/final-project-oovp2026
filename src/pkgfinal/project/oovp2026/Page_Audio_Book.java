@@ -111,9 +111,6 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         Delete_AB.addActionListener(e -> deleteAudioBook());
         Refresh_AB.addActionListener(e -> {
             loadAudioBookTable();
-            loadCategoryCombo();
-            loadAuthorCombo();
-            loadPublisherCombo();
             clearAudioBookForm();
         });
         AB_Table.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -346,10 +343,6 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     }
  
     private void wireAuthorButtons() {
-        Add_Auth.addActionListener(e -> addAuthor());
-        Edit_Auth.addActionListener(e -> editAuthor());
-        Delete_Auth.addActionListener(e -> deleteAuthor());
-        Refresh_Auth.addActionListener(e -> { loadAuthorTable(); clearAuthorForm(); });
         Auth_Table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -391,13 +384,13 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         String name    = Auth_Name.getText().trim();
         String contact = Auth_Contact.getText().trim();
  
-        String newId = generateNextId("SELECT Author_Audio_Book_ID FROM author_audio_book ORDER BY Author_Audio_Book_ID DESC LIMIT 1", "AUTHAB");
+        if (name.isEmpty()) { JOptionPane.showMessageDialog(this, "Author Name tidak boleh kosong!"); return; }
         try (Connection con = getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO author_audio_book (Author_Audio_Book_ID, Author_Audio_Book_Name, Author_Audio_Book_Contact) VALUES (?,?,?)")) {
-        ps.setString(1, newId);
-        ps.setString(2, name);
-        ps.setString(3, contact.isEmpty() ? null : contact);
+                "UPDATE author_audio_book SET Author_Audio_Book_Name=?, Author_Audio_Book_Contact=? WHERE Author_Audio_Book_ID=?")) {
+            ps.setString(1, name);
+            ps.setString(2, contact.isEmpty() ? null : contact);
+            ps.setString(3, id);
             ps.executeUpdate();
             JOptionPane.showMessageDialog(this, "Author berhasil diupdate!");
             loadAuthorTable();
@@ -952,13 +945,17 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         jScrollPane1.setViewportView(AB_Table);
 
         Add_AB.setText("Add");
+        Add_AB.addActionListener(this::Add_ABActionPerformed);
 
         Edit_AB.setText("Edit");
+        Edit_AB.addActionListener(this::Edit_ABActionPerformed);
 
         Refresh_AB.setText("Refresh");
+        Refresh_AB.addActionListener(this::Refresh_ABActionPerformed);
 
         Delete_AB.setForeground(new java.awt.Color(204, 0, 51));
         Delete_AB.setText("Delete");
+        Delete_AB.addActionListener(this::Delete_ABActionPerformed);
 
         javax.swing.GroupLayout ABLayout = new javax.swing.GroupLayout(AB);
         AB.setLayout(ABLayout);
@@ -1194,13 +1191,17 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         jScrollPane4.setViewportView(Auth_Table);
 
         Add_Auth.setText("Add");
+        Add_Auth.addActionListener(this::Add_AuthActionPerformed);
 
         Edit_Auth.setText("Edit");
+        Edit_Auth.addActionListener(this::Edit_AuthActionPerformed);
 
         Refresh_Auth.setText("Refresh");
+        Refresh_Auth.addActionListener(this::Refresh_AuthActionPerformed);
 
         Delete_Auth.setForeground(new java.awt.Color(204, 0, 51));
         Delete_Auth.setText("Delete");
+        Delete_Auth.addActionListener(this::Delete_AuthActionPerformed);
 
         javax.swing.GroupLayout AuthorLayout = new javax.swing.GroupLayout(Author);
         Author.setLayout(AuthorLayout);
@@ -1548,6 +1549,43 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         this.dispose();
     }
     }//GEN-LAST:event_LogOutButtonActionPerformed
+
+    private void Edit_ABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_ABActionPerformed
+    editAudioBook();
+    }//GEN-LAST:event_Edit_ABActionPerformed
+
+    private void Add_ABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_ABActionPerformed
+    addAudioBook();
+    }//GEN-LAST:event_Add_ABActionPerformed
+
+    private void Delete_ABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete_ABActionPerformed
+    deleteAudioBook();
+    }//GEN-LAST:event_Delete_ABActionPerformed
+
+    private void Refresh_ABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Refresh_ABActionPerformed
+    loadAudioBookTable();
+    loadCategoryCombo();
+    loadAuthorCombo();
+    loadPublisherCombo();
+    clearAudioBookForm();
+    }//GEN-LAST:event_Refresh_ABActionPerformed
+
+    private void Edit_AuthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_AuthActionPerformed
+    editAuthor();
+    }//GEN-LAST:event_Edit_AuthActionPerformed
+
+    private void Add_AuthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_AuthActionPerformed
+    addAuthor();
+    }//GEN-LAST:event_Add_AuthActionPerformed
+
+    private void Refresh_AuthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Refresh_AuthActionPerformed
+    loadAuthorTable();
+    clearAuthorForm();
+    }//GEN-LAST:event_Refresh_AuthActionPerformed
+
+    private void Delete_AuthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete_AuthActionPerformed
+    deleteAuthor();
+    }//GEN-LAST:event_Delete_AuthActionPerformed
 
     /**
      * @param args the command line arguments

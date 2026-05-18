@@ -378,16 +378,25 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Add"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Add_ABActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="Edit_AB">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Edit"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Edit_ABActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="Refresh_AB">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Refresh"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Refresh_ABActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="Delete_AB">
               <Properties>
@@ -396,6 +405,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Delete"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Delete_ABActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -674,16 +686,25 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Add"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Add_AuthActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="Edit_Auth">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Edit"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Edit_AuthActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="Refresh_Auth">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Refresh"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Refresh_AuthActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="Delete_Auth">
               <Properties>
@@ -692,6 +713,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Delete"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Delete_AuthActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
