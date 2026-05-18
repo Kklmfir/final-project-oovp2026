@@ -1,11 +1,80 @@
-#NetBeans
-build/
+# NetBeans / Java build artifacts
+nbproject/private/
+nbbuild/
 dist/
+build/
+out/
+*.class
 
-# IDE
+# IDEs
+# IntelliJ
 .idea/
 *.iml
+*.iws
+# Eclipse
+.classpath
+.project
+.settings/
+# VS Code
+.vscode/
+
+# Java/Maven/Gradle
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.gradle/
+gradle-app.setting
+gradle-wrapper.jar
+
+# Local jars/libraries (if you keep libs/ for convenience, ignore its jars or pick policy)
+# Option A: Ignore all jars in lib/ and manage dependencies with Maven/Gradle
+lib/*.jar
+# Option B: If you must keep specific jars, DO NOT ignore lib/, instead list only temporary IDE jars you don't want:
+# *.jar in other temporary dirs
+*.war
+*.ear
+
+# Logs, runtime data, temp
+*.log
+*.tmp
+*.swp
+*.swo
+tmp/
+temp/
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Sensitive config / env (DB credentials, local overrides)
+.env
+.env.local
+*.env
+config.properties
+db.properties
+credentials.properties
+secret-*.key
+*.pem
+*.p12
+
+# Generated database dumps (ignore local dumps if you create them)
+*.sql.gz
+*.sql.zip
+dump-*.sql
+
+# macOS, Windows thumbnails, thumbnails db
+Icon?
+ehthumbs.db
+Desktop.ini
+
+# JetBrains Rider / other
+.idea/
+
+# Optional: ignore compiled native libs
+*.so
+*.dll
+*.dylib
