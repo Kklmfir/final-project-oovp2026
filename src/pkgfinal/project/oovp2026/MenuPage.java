@@ -100,7 +100,8 @@ public class MenuPage extends javax.swing.JFrame {
         );
 
         pack();
-
+    }
+    
     /**
      * Method: ShowBooksButtonActionPerformed(ActionEvent)
      * Description: Handler "Show the Books" button -> open the Page_Book

@@ -8,16 +8,18 @@
  * @author faira
  */
 
+package pkgfinal.project.oovp2026;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import librarymanagementsystem.DBConnection;
+import pkgfinal.project.oovp2026.DBConnection;
 import net.proteanit.sql.DbUtils;
 
 
 public class MemberForm extends javax.swing.JFrame {
-    Connection conn = DBConnection.connect();
+    Connection conn = DBConnection.getConnection();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MemberForm.class.getName());
 
     public MemberForm() {
