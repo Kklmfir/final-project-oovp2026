@@ -311,9 +311,9 @@ Use carefully and coordinate with contributors.
 | Name | Email | GitHub |
 |---|---|---|
 | Alfairaz Putra Anantar | alfairaz.anantar@student.president.ac.id | [@AlfairazAnantar](https://github.com/AlfairazAnantar) |
-| Azizah Putri Susanto | azizah.susanto@student.president.ac.id | [@*](https://github.com/) |
+| Azizah Putri Susanto | azizah.susanto@student.president.ac.id | [@Azarisant-2304](https://github.com/Azarisant-2304) |
 | Keefi Almer Firdaus | keefi.firdaus@student.president.ac.id | [@KeefiFirdaus](https://github.com/KeefiFirdaus) |
 | M Fattah Fadli Rohman P | m.fattahputra@student.president.ac.id | [@*](https://github.com/) |
-| Yesi Nurfitriyani | yesi.nurfitriyani@student.president.ac.id | [@*](https://github.com/) |
+| Yesi Nurfitriyani | yesi.nurfitriyani@student.president.ac.id | [@ziaa-cantik](https://github.com/ziaa-cantik) |
 
 For questions, suggestions, or issues, please open an Issue in this repository.

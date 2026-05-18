@@ -1,5 +1,8 @@
 -- DUMMY DATA FINAL-PROJECT-OOVP2026
 
+-- DISABLE FOREIGN KEY CHECKS TO AVOID CONSTRAINT ERRORS DURING INSERTION
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- ERASE OLD DATA (OPTIONAL - if tables exist)
 DELETE FROM Author_Book;
 DELETE FROM Book;
@@ -8,9 +11,6 @@ DELETE FROM Issued_Book;
 DELETE FROM Member;
 DELETE FROM Member_Type;
 DELETE FROM Publisher;
-
--- DISABLE FOREIGN KEY CHECKS TO AVOID CONSTRAINT ERRORS DURING INSERTION
-SET FOREIGN_KEY_CHECKS = 0;
 
 -- Book
 INSERT INTO Book (Book_ID, Book_Title, Book_Author_ID, Book_Category_ID, Book_Publisher_ID, Book_Year, ISBN, Book_Stock, Book_Status) VALUES
@@ -145,10 +145,10 @@ INSERT INTO Author_Book (Author_Book_ID, Author_Book_Name, Author_Book_Contact) 
 DELETE FROM Author_Journal;
 DELETE FROM Institute;
 DELETE FROM Journal;
-DELETE FROM Issued_Journal;
+/* DELETE FROM Issued_Journal; */
 DELETE FROM Author_Audio_Book;
 DELETE FROM Audio_Book;
-DELETE FROM Issued_Audio_Book;
+/* DELETE FROM Issued_Audio_Book; */
 
 --- Author_Journal
 INSERT INTO Author_Journal (Author_Journal_ID, Author_Journal_Name, Author_Journal_Contact) VALUES
@@ -174,6 +174,7 @@ INSERT INTO Journal (Journal_ID, Journal_Title, Journal_Year, Journal_Author_ID,
     ('JRN004', 'Best Solution for Icikiwir Upgrades', 2022, 'AUTHJ004', 'PUB005', 'INST004', 'Bandung', 'Scopus 3'),
     ('JRN005', 'Cybersecurity Using Banks Security', 2023, 'AUTHJ005', 'PUB006', 'INST005', 'Yogyakarta', 'Scopus 1');
 
+/*
 -- Issued_Journal
 INSERT INTO Issued_Journal (Issued_Journal_ID, Journal_ID, Member_ID, Date_Issued, Date_Returned) VALUES
     ('ISJ001', 'JRN001', 'STU2026001', '2026-04-10 09:00:00', '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Journal of Computer Science"
@@ -181,6 +182,7 @@ INSERT INTO Issued_Journal (Issued_Journal_ID, Journal_ID, Member_ID, Date_Issue
     ('ISJ003', 'JRN003', 'GST2026003', '2026-04-20 19:00:00', '2026-04-27 20:00:00'), -- Keefi Almer borrows "How To Be A Good Meong"
     ('ISJ004', 'JRN004', 'LEC2026004', '2026-04-18 17:00:00', '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "Best Solution for Icikiwir Upgrades"
     ('ISJ005', 'JRN005', 'GST2026005', '2026-04-21 20:00:00', '2026-04-28 21:00:00'); -- Alfairaz Putra borrows "Cybersecurity Using Banks Security"
+*/
 
 -- Author_Audio_Book
 INSERT INTO Author_Audio_Book (Author_Audio_Book_ID, Author_Audio_Book_Name, Author_Audio_Book_Contact) VALUES
@@ -198,6 +200,7 @@ INSERT INTO Audio_Book (Audio_Book_ID, Audio_Book_Title, Audio_Book_Author_ID, A
     ('ABK004', 'The Adventures of Icikiwir', 'AUTHAB004', 'CAT004', 'PUB004', 2023, '9789799731241', 4800, 'MP3', 1), -- Available
     ('ABK005', 'The Secrets of Kicau Mania', 'AUTHAB005', 'CAT005', 'PUB005', 2024, '9789791227209', 3000, 'AAC', 0); -- Borrowed
 
+/*
 -- Issued_Audio_Book
 INSERT INTO Issued_Audio_Book (Issued_Audio_Book_ID, Audio_Book_ID, Member_ID, Date_Issued, Date_Returned) VALUES
     ('ISAB001', 'ABK001', 'STU2026001', '2026-04-10 09:00:00', '2026-04-15 10:00:00'), -- Keefi Almer Firdaus borrows "Sad Miaw Story"
@@ -205,6 +208,7 @@ INSERT INTO Issued_Audio_Book (Issued_Audio_Book_ID, Audio_Book_ID, Member_ID, D
     ('ISAB003', 'ABK003', 'GST2026003', '2026-04-20 19:00:00', '2026-04-27 20:00:00'), -- Keefi Almer borrows "How to Call Chicken"
     ('ISAB004', 'ABK004', 'LEC2026004', '2026-04-18 17:00:00', '2026-05-18 18:00:00'), -- Dr. Yesi N. Fitriyani borrows "The Adventures of Icikiwir"
     ('ISAB005', 'ABK005', 'GST2026005', '2026-04-21 20:00:00', '2026-04-28 21:00:00'); -- Alfairaz Putra borrows "The Secrets of Kicau Mania"
+*/
 
 -- RE-ENABLE FOREIGN KEY CHECKS AFTER INSERTION
 SET FOREIGN_KEY_CHECKS = 1;

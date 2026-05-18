@@ -24,7 +24,7 @@ import net.proteanit.sql.DbUtils;
 public class Page_Member extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Member.class.getName());
     private static final int FINE_BASE_RP_PER_DAY = 10_000; // Base fine in Rp per day
-    private MenuPage parent = null;
+    private menuPage parent = null;
     private final SimpleDateFormat uiDateFormat = new SimpleDateFormat("dd/MM/yyyy"); // For displaying dates in the UI
     private final DecimalFormat moneyFormat = new DecimalFormat("#,##0"); // For formatting money values
 
@@ -40,7 +40,7 @@ public class Page_Member extends javax.swing.JFrame {
      * Constructor overload: Page_Member(menuPage parent)
      * @param parent The parent menu page to return to when navigating back
      */
-    public Page_Member(MenuPage parent) {
+    public Page_Member(menuPage parent) {
         this.parent = parent;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window
     }
@@ -724,7 +724,11 @@ public class Page_Member extends javax.swing.JFrame {
 
         pack();
     }
-    
+
+    private void Add_MemActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
     /**
      * @param args the command line arguments
      */

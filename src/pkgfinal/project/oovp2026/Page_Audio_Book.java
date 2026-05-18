@@ -3,33 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pkgfinal.project.oovp2026;
-
-import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
 public class Page_Audio_Book extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Audio_Book.class.getName());
 
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/final-project-oovp2026";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
-
-    private MenuPage parent = null;
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-    }
-    
     /**
      * Creates new form Page_Book
      */
     public Page_Audio_Book() {
         initComponents();
-        setLocationRelativeTo(null);
         
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat calFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -789,6 +773,8 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     
     
     
+    }
+    
     private void countDate() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -809,8 +795,7 @@ public class Page_Audio_Book extends javax.swing.JFrame {
 
             String returnDate = sdf.format(cal.getTime());
             label17.setText("Return Date: " + returnDate);
-            Return_Date.setText(returnDate);
-            
+
         } catch (Exception e) {
             System.err.println("Error while counting days: " + e.getMessage());
         }
@@ -907,11 +892,6 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         LogOutButton.addActionListener(this::LogOutButtonActionPerformed);
 
         MenuButton.setLabel("Back to Menu");
-        MenuButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                MenuButtonMouseClicked(evt);
-            }
-        });
 
         TabMenu.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -1530,27 +1510,9 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     }//GEN-LAST:event_AB_DurationActionPerformed
 
     private void AB_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AB_TableMouseClicked
-    int row = AB_Table.getSelectedRow();
-    if (row < 0) return;
-    AB_Title.setText(nullSafe(AB_Table.getValueAt(row, 1)));
-    AB_Year.setText(nullSafe(AB_Table.getValueAt(row, 5)));
-    AB_ISBN.setText(nullSafe(AB_Table.getValueAt(row, 6)));
-    AB_Duration.setText(nullSafe(AB_Table.getValueAt(row, 7)));
-    selectComboByValue(AB_Category, nullSafe(AB_Table.getValueAt(row, 2)));
-    selectComboByValue(AB_Author,   nullSafe(AB_Table.getValueAt(row, 3)));
-    selectComboByValue(AB_Publisher,nullSafe(AB_Table.getValueAt(row, 4)));
-    selectComboByValue(AB_Format,   nullSafe(AB_Table.getValueAt(row, 8)));
+        // TODO add your handling code here:
     }//GEN-LAST:event_AB_TableMouseClicked
-    
-    private void selectComboByValue(JComboBox<String> combo, String value) {
-    if (value == null || value.isEmpty()) return;
-    for (int i = 0; i < combo.getItemCount(); i++) {
-        if (combo.getItemAt(i) != null && combo.getItemAt(i).contains(value)) {
-            combo.setSelectedIndex(i);
-            return;
-        }
-    }
-}
+
     private void Cat_NameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Cat_NameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Cat_NameActionPerformed
@@ -1560,7 +1522,7 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     }//GEN-LAST:event_Cat_TableMouseClicked
 
     private void Borrow_DateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Borrow_DateActionPerformed
-    countDate();
+        // TODO add your handling code here:
     }//GEN-LAST:event_Borrow_DateActionPerformed
 
     private void Return_DateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Return_DateActionPerformed
@@ -1572,11 +1534,7 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     }//GEN-LAST:event_countDate
 
     private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
-    int confirm = JOptionPane.showConfirmDialog(this,
-        "Apakah Anda yakin ingin logout?", "Konfirmasi Logout", JOptionPane.YES_NO_OPTION);
-    if (confirm == JOptionPane.YES_OPTION) {
-        this.dispose();
-    }
+        // TODO add your handling code here:
     }//GEN-LAST:event_LogOutButtonActionPerformed
 
     private void Edit_ABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_ABActionPerformed

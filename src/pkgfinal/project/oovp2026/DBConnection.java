@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package pkgfinal.project.oovp2026;
+package librarymanagementsystem;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,9 +12,6 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 public class DBConnection {
-    public static Connection getConnection() {
-        return connect();
-    }
     public static Connection connect() {
         try {
             String url = "jdbc:mysql://localhost:3306/final-project-oovp2026";
