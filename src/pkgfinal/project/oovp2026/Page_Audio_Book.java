@@ -18,6 +18,8 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
 
+    private MenuPage parent = null;
+
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
     }
@@ -48,8 +50,30 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     wireCategoryButtons();
     wireAuthorButtons();
     wirePublisherButtons();
-}
-    
+    }
+
+    /**
+     * Constructor overload: Page_Book(MenuPage Parent)
+     * Description: Navigation from MenuPage and keep reference to MenuPage as parent
+     */
+    public Page_Audio_Book(MenuPage Parent) {
+        this();
+        this.parent = parent;
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void MenuButtonMouseClicked(java.awt.event.MouseEvent evt) {
+        if (parent != null) {
+            parent.setLocationRelativeTo(null);
+            parent.setVisible(true);
+        } else {
+            MenuPage menu = new MenuPage();
+            menu.setLocationRelativeTo(null);
+            menu.setVisible(true);
+        }
+        this.dispose();
+    }
+
     private void loadAudioBookTable() {
         String sql = "SELECT ab.Audio_Book_ID, ab.Audio_Book_Title, c.Category_Name, " +
                      "a.Author_Audio_Book_Name, p.Publisher_Name, ab.Audio_Book_Year, " +
@@ -890,6 +914,11 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         LogOutButton.addActionListener(this::LogOutButtonActionPerformed);
 
         MenuButton.setLabel("Back to Menu");
+        MenuButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MenuButtonMouseClicked(evt);
+            }
+        });
 
         TabMenu.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 

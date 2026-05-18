@@ -18,7 +18,7 @@ INSERT INTO Book (Book_ID, Book_Title, Book_Author_ID, Book_Category_ID, Book_Pu
     ('BK002', 'Sang Pemimpi', 'AUTH001', 'CAT001', 'PUB001', 2006, '9789791227209', 5, 1), -- Available
     ('BK003', 'Bumi Manusia', 'AUTH002', 'CAT003', 'PUB009', 1980, '9789799731234', 8, 1), -- Available
     ('BK004', 'Anak Semua Bangsa', 'AUTH002', 'CAT003', 'PUB009', 1981, '9789799731241', 6, 0), -- Borrowed
-    ('BK005', 'Negeri 5 Menara', 'AUTH003', 'CAT009', 'PUB002', 2009, '9789791227209', 4, 1), -- Available
+    ('BK005', 'Negeri 5 Menara', 'AUTH003', 'CAT009', 'PUB002', 2009, '9789791227216', 4, 1), -- Available
     ('BK006', 'Ranah 3 Warna', 'AUTH003', 'CAT009', 'PUB002', 2011, '9789792248616', 3, 0), -- Borrowed
     ('BK007', 'Ayat-Ayat Cinta', 'AUTH004', 'CAT004', 'PUB003', 2004, '9789793210605', 7, 1), -- Available
     ('BK008', 'Ketika Cinta Bertasbih', 'AUTH004', 'CAT004', 'PUB003', 2007, '9789791102162', 5, 0), -- Borrowed
