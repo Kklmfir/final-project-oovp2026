@@ -26,7 +26,7 @@ public class LoginPage extends javax.swing.JFrame {
     public LoginPage() {
         initComponents();
     }
-
+    
     /**
      * Method: initComponents()
      * Description: GUI builder generated code
