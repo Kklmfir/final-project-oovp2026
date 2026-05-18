@@ -15,7 +15,7 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Additional Feature
-DROP TABLE IF EXISTS Author_Journal, Institute, Journal, Issued_Journal, Author_Audio_Book, Audio_Book;
+DROP TABLE IF EXISTS Issued_Journal, Author_Journal, Institute, Journal, Issued_Audio_Book, Author_Audio_Book, Audio_Book;
 
 -- ERASE OLD TABLES
 DROP TABLE IF EXISTS Issued_Book, Member, Member_Type, Book, Author_Book, Category, Publisher;
@@ -175,6 +175,7 @@ CREATE TABLE IF NOT EXISTS Journal (
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+/*
 -- Issued_Journal
 CREATE TABLE IF NOT EXISTS Issued_Journal (
   Issued_Journal_ID VARCHAR(10) PRIMARY KEY,
@@ -193,6 +194,7 @@ CREATE TABLE IF NOT EXISTS Issued_Journal (
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+*/
 
 -- Author_Audio_Book
 CREATE TABLE IF NOT EXISTS Author_Audio_Book (
@@ -231,6 +233,7 @@ CREATE TABLE IF NOT EXISTS Audio_Book (
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+/*
 -- Issued_Audio_Book
 CREATE TABLE IF NOT EXISTS Issued_Audio_Book (
   Issued_Audio_Book_ID VARCHAR(10) PRIMARY KEY,
@@ -249,6 +252,7 @@ CREATE TABLE IF NOT EXISTS Issued_Audio_Book (
     ON UPDATE CASCADE
     ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+*/
 
 -- RE-ENABLE FOREIGN KEY CHECKS AFTER INSERTION
 SET FOREIGN_KEY_CHECKS = 1;
