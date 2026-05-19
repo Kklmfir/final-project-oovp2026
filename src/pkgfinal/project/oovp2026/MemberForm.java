@@ -8,16 +8,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+
+import pkgfinal.project.oovp2026.*;
 
 public class MemberForm extends javax.swing.JFrame {
     Connection conn = DBConnection.connect();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MemberForm.class.getName());
-
+    
     public MemberForm() {
         initComponents();
         autoIDMember();
         loadTable();
     }
+
+    /**
+     * Class: DbUtils
+     * @param rs
+     * @return
+     */
+    public class DbUtils {
+    public static TableModel resultSetToTableModel(ResultSet rs) {
+            throw new UnsupportedOperationException("Unimplemented method 'resultSetToTableModel'");
+        }
+    }
+
     private void loadTable() {
         try {
             String sql = "SELECT Member_ID, Member_Name, Member_Type_ID, Identifier, Email, Phone, Register_Date FROM Member";
@@ -79,6 +94,7 @@ public class MemberForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMember = new javax.swing.JTable();
         cbIdentifier = new javax.swing.JComboBox<>();
+        btnLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,7 +114,7 @@ public class MemberForm extends javax.swing.JFrame {
 
         txtMemberName.addActionListener(this::txtMemberNameActionPerformed);
 
-        cbMemberType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GST001", "GST002", "GST003", "GST004", "GST005", "LEC001", "LEC002", "LEC003", "LEC004", "LEC005", "STD001", "STD002", "STD003", "STD004", "STD005", " " }));
+        cbMemberType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Guest", "Student", "Lecurer" }));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -130,7 +146,7 @@ public class MemberForm extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Name", "Type", "Identifier"
             }
         ));
         tblMember.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -140,7 +156,10 @@ public class MemberForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblMember);
 
-        cbIdentifier.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Staff", "Guest", "Lecture", "Other" }));
+        cbIdentifier.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Staff", "Guest", "Lecture" }));
+
+        btnLogin.setText("Back to Login");
+        btnLogin.addActionListener(this::btnLoginActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,6 +203,10 @@ public class MemberForm extends javax.swing.JFrame {
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(43, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLogin)
+                .addGap(69, 69, 69))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,7 +245,9 @@ public class MemberForm extends javax.swing.JFrame {
                     .addComponent(btnClear))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(453, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnLogin)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
@@ -393,6 +418,13 @@ public class MemberForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jScrollPane1MouseClicked
 
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        LoginPage lp = new LoginPage();
+        lp.setLocationRelativeTo(null);
+        lp.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnLoginActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -422,6 +454,7 @@ public class MemberForm extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cbIdentifier;
     private javax.swing.JComboBox<String> cbMemberType;

@@ -16,7 +16,9 @@ import java.util.logging.Level;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-import net.proteanit.sql.DbUtils;
+import javax.swing.table.TableModel;
+
+import pkgfinal.project.oovp2026.*; // for MenuPage and LoginPage
 
 /**
  * Class: Page_Member (JFrame)
@@ -24,9 +26,9 @@ import net.proteanit.sql.DbUtils;
 public class Page_Member extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Member.class.getName());
     private static final int FINE_BASE_RP_PER_DAY = 10_000; // Base fine in Rp per day
-    private menuPage parent = null;
     private final SimpleDateFormat uiDateFormat = new SimpleDateFormat("dd/MM/yyyy"); // For displaying dates in the UI
     private final DecimalFormat moneyFormat = new DecimalFormat("#,##0"); // For formatting money values
+    private MenuPage parent = null;
 
     /**
      * Constructor: Page_Member()
@@ -37,10 +39,10 @@ public class Page_Member extends javax.swing.JFrame {
     }
     
     /**
-     * Constructor overload: Page_Member(menuPage parent)
+     * Constructor overload: Page_Member(MenuPage parent)
      * @param parent The parent menu page to return to when navigating back
      */
-    public Page_Member(menuPage parent) {
+    public Page_Member(MenuPage parent) {
         this.parent = parent;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window
     }
@@ -102,6 +104,17 @@ public class Page_Member extends javax.swing.JFrame {
                 String name = rs.getString("Type_Name");
                 Mem_Member_Type.addItem(id + "-" + name);
             }
+        }
+    }
+
+    /**
+     * Class: DbUtils
+     * @param rs
+     * @return
+     */
+    public class DbUtils {
+    public static TableModel resultSetToTableModel(ResultSet rs) {
+            throw new UnsupportedOperationException("Unimplemented method 'resultSetToTableModel'");
         }
     }
 
@@ -227,7 +240,7 @@ public class Page_Member extends javax.swing.JFrame {
      * Method: Add_MemActionPerformed(ActionEvent)
      * Description: Handle add member button click, validate input, and insert new member into database
      */
-    private void Add_MemActionPerformed(java.awt.event.ActionEvent evt) {
+    private void Add_MemActionPerformed1(java.awt.event.ActionEvent evt) {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -499,7 +512,7 @@ public class Page_Member extends javax.swing.JFrame {
         jScrollPane4.setViewportView(Mem_Table);
 
         Add_Mem.setText("Add");
-        Add_Mem.addActionListener(this::Add_MemActionPerformed);
+        Add_Mem.addActionListener(this::Add_MemActionPerformed1);
 
         Edit_Mem.setText("Edit");
 

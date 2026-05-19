@@ -10,6 +10,8 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import pkgfinal.project.oovp2026.MenuPage;
+import pkgfinal.project.oovp2026.LoginPage;
+
 public class Page_Audio_Book extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Audio_Book.class.getName());
@@ -50,18 +52,6 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         this();
         this.parent = parent;
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    }
-
-    private void MenuButtonMouseClicked(java.awt.event.MouseEvent evt) {
-        if (parent != null) {
-            parent.setLocationRelativeTo(null);
-            parent.setVisible(true);
-        } else {
-            MenuPage menu = new MenuPage();
-            menu.setLocationRelativeTo(null);
-            menu.setVisible(true);
-        }
-        this.dispose();
     }
 
     private void loadAudioBookTable() {
@@ -1540,10 +1530,6 @@ public class Page_Audio_Book extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_countDate
 
-    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_LogOutButtonActionPerformed
-
     private void Edit_ABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_ABActionPerformed
     editAudioBook();
     }//GEN-LAST:event_Edit_ABActionPerformed
@@ -1580,6 +1566,29 @@ public class Page_Audio_Book extends javax.swing.JFrame {
     private void Delete_AuthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete_AuthActionPerformed
     deleteAuthor();
     }//GEN-LAST:event_Delete_AuthActionPerformed
+
+    private void MenuButtonMouseClicked(java.awt.event.MouseEvent evt) {
+        if (parent != null) {
+            parent.setLocationRelativeTo(null);
+            parent.setVisible(true);
+        } else {
+            MenuPage menu = new MenuPage();
+            menu.setLocationRelativeTo(null);
+            menu.setVisible(true);
+        }
+        this.dispose();
+    }
+
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        LoginPage lp = new LoginPage();
+        lp.setLocationRelativeTo(null);
+        lp.setVisible(true);
+
+        if (parent != null) {
+            parent.dispose(); // close hidden MenuPage if available
+        }
+        this.dispose(); // close Page_Book
+    }
 
     /**
      * @param args the command line arguments

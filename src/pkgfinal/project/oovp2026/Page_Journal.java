@@ -3,19 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pkgfinal.project.oovp2026;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import net.proteanit.sql.DbUtils;
 import com.toedter.calendar.JDateChooser;
-import java.sql.*;
+
+import pkgfinal.project.oovp2026.MenuPage;
+import pkgfinal.project.oovp2026.LoginPage;
 
 public class Page_Journal extends javax.swing.JFrame {
     Connection conn = DBConnection.connect();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Journal.class.getName());
+    private MenuPage parent = null;
 
     /**
      * Creates new form Page_Book
@@ -110,7 +116,12 @@ public class Page_Journal extends javax.swing.JFrame {
             String sql = "SELECT * FROM journal";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             java.sql.ResultSet rs = pst.executeQuery();
-            Journal_Table.setModel(net.proteanit.sql.DbUtils.resultSetToTableModel(rs));
+            Journal_Table.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {},
+                new String [] {
+                    "Journal ID", "Title", "Institute", "Author", "Publisher", "Year", "Link", "City", "Index"
+                }
+            ));
         } catch (Exception e) {
             System.out.println("Error Load Table Journal: " + e.getMessage());
             }
@@ -758,10 +769,6 @@ public class Page_Journal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_LogOutButtonActionPerformed
-
     private void Delete_PubActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Delete_PubActionPerformed
         try {
             int confirm = JOptionPane.showConfirmDialog(null, "Yakin mau hapus publisher ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -1157,6 +1164,17 @@ public class Page_Journal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new Page_Journal().setVisible(true));
     }
 
+    /**
+     * Class: DbUtils
+     * @param rs
+     * @return
+     */
+    public class DbUtils {
+    public static TableModel resultSetToTableModel(ResultSet rs) {
+            throw new UnsupportedOperationException("Unimplemented method 'resultSetToTableModel'");
+        }
+    }
+
     private void loadPubTable() {
         try {
             String sql = "SELECT * FROM publisher";
@@ -1221,16 +1239,34 @@ public class Page_Journal extends javax.swing.JFrame {
             String sql = "SELECT * FROM institute";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             java.sql.ResultSet rs = pst.executeQuery();
-            Institute_Table.setModel(net.proteanit.sql.DbUtils.resultSetToTableModel(rs));
+            Institute_Table.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
             System.out.println("Error Load Table Institute: " + e.getMessage());
         }
     }
-    
-    
-    
-    
-    
+
+    private void MenuButtonMouseClicked(java.awt.event.MouseEvent evt) {
+        if (parent != null) {
+            parent.setLocationRelativeTo(null);
+            parent.setVisible(true);
+        } else {
+            MenuPage menu = new MenuPage();
+            menu.setLocationRelativeTo(null);
+            menu.setVisible(true);
+        }
+        this.dispose();
+    }
+
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        LoginPage lp = new LoginPage();
+        lp.setLocationRelativeTo(null);
+        lp.setVisible(true);
+
+        if (parent != null) {
+            parent.dispose(); // close hidden MenuPage if available
+        }
+        this.dispose(); // close Page_Book
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Add_Auth;

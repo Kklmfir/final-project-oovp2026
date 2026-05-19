@@ -4,12 +4,17 @@
  */
 package pkgfinal.project.oovp2026;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import net.proteanit.sql.DbUtils;
+import com.toedter.calendar.JDateChooser;
+
 // To input MenuPage and LoginPage
 import pkgfinal.project.oovp2026.MenuPage;
 import pkgfinal.project.oovp2026.LoginPage;
@@ -22,6 +27,17 @@ public class Page_Book extends javax.swing.JFrame {
     private MenuPage parent = null;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Book.class.getName());
+
+    /**
+     * Class: DbUtils
+     * @param rs
+     * @return
+     */
+    public class DbUtils {
+    public static TableModel resultSetToTableModel(ResultSet rs) {
+            throw new UnsupportedOperationException("Unimplemented method 'resultSetToTableModel'");
+        }
+    }
 
     /**
      * Method: loadComboBox()
@@ -953,19 +969,19 @@ public class Page_Book extends javax.swing.JFrame {
         pack();
     }
 
-    private void Book_TitleActionPerformed(java.awt.event.ActionEvent evt) { event_Book_TitleActionPerformed
+    private void Book_TitleActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } event_Book_TitleActionPerformed
+    }
 
-    private void Book_YearActionPerformed(java.awt.event.ActionEvent evt) { event_Book_YearActionPerformed
+    private void Book_YearActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } event_Book_YearActionPerformed
+    }
 
-    private void Book_ISBNActionPerformed(java.awt.event.ActionEvent evt) { event_Book_ISBNActionPerformed
+    private void Book_ISBNActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } event_Book_ISBNActionPerformed
+    } 
 
-    private void Book_TableMouseClicked(java.awt.event.MouseEvent evt) { event_Book_TableMouseClicked
+    private void Book_TableMouseClicked(java.awt.event.MouseEvent evt) { 
         int row = Book_Table.getSelectedRow();
         String id = Book_Table.getValueAt(row, 0).toString();
 
@@ -983,28 +999,28 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    } event_Book_TableMouseClicked
+    }
 
-    private void Cat_IDActionPerformed(java.awt.event.ActionEvent evt) { event_Cat_IDActionPerformed
+    private void Cat_IDActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } event_Cat_IDActionPerformed
-
-    private void Cat_TableMouseClicked(java.awt.event.MouseEvent evt) { event_Cat_TableMouseClicked
+    }
+    
+    private void Cat_TableMouseClicked(java.awt.event.MouseEvent evt) {
         int row = Cat_Table.getSelectedRow();
         Cat_ID.setText(Cat_Table.getValueAt(row, 0).toString());
         Cat_Name.setText(Cat_Table.getValueAt(row, 1).toString());
         Cat_Description.setText(Cat_Table.getValueAt(row, 2).toString());
-    } event_Cat_TableMouseClicked
+    }
 
-    private void countDate(java.awt.event.ItemEvent evt) { event_countDate
+    private void countDate(java.awt.event.ItemEvent evt) {
         // TODO add your handling code here:
-    } event_countDate
+    }
 
-    private void Book_IDActionPerformed(java.awt.event.ActionEvent evt) { event_Book_IDActionPerformed
+    private void Book_IDActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } event_Book_IDActionPerformed
+    }
 
-    private void Add_BookActionPerformed(java.awt.event.ActionEvent evt) { event_Add_BookActionPerformed
+    private void Add_BookActionPerformed(java.awt.event.ActionEvent evt) {
         try {
         String sql = "INSERT INTO Book (Book_ID, Book_Title, Book_Category_ID, Book_Author_ID, Book_Publisher_ID, Book_Year, ISBN, Book_Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement pst = conn.prepareStatement(sql);
@@ -1043,13 +1059,13 @@ public class Page_Book extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Failed to Add Book Data: " + e.getMessage());
         }
         
-    } event_Add_BookActionPerformed
+    }
 
-    private void Cat_NameActionPerformed(java.awt.event.ActionEvent evt) { event_Cat_NameActionPerformed
+    private void Cat_NameActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } event_Cat_NameActionPerformed
+    }
 
-    private void Add_CatActionPerformed(java.awt.event.ActionEvent evt) { event_Add_CatActionPerformed
+    private void Add_CatActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String sql = "INSERT INTO Category (Category_ID, Category_Name, Description) VALUES (?, ?, ?)";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -1066,9 +1082,9 @@ public class Page_Book extends javax.swing.JFrame {
             Cat_Name.setText("");
             Cat_Description.setText("");
         } catch (Exception e) { JOptionPane.showMessageDialog(null, "Failed to Add Category Data: " + e.getMessage()); }
-    } event_Add_CatActionPerformed
+    }
 
-    private void Edit_BookActionPerformed(java.awt.event.ActionEvent evt) { event_Edit_BookActionPerformed
+    private void Edit_BookActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String sql = "UPDATE Book SET Book_Title=?, Book_Category_ID=?, Book_Author_ID=?, Book_Publisher_ID=?, Book_Year=?, ISBN=? WHERE Book_ID=?";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -1088,9 +1104,9 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Update Book Data: " + e.getMessage());
         }
-    } event_Edit_BookActionPerformed
+    }
 
-    private void Refresh_BookActionPerformed(java.awt.event.ActionEvent evt) { event_Refresh_BookActionPerformed
+    private void Refresh_BookActionPerformed(java.awt.event.ActionEvent evt) {
         Book_ID.setText("");
         Book_Title.setText("");
         Book_Year.setText("");
@@ -1101,9 +1117,9 @@ public class Page_Book extends javax.swing.JFrame {
     
         loadBookTable();
         autoIDBook();
-    } event_Refresh_BookActionPerformed
+    }
 
-    private void Delete_BookActionPerformed(java.awt.event.ActionEvent evt) { event_Delete_BookActionPerformed
+    private void Delete_BookActionPerformed(java.awt.event.ActionEvent evt) {
         int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this book?", "Confirm", JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
@@ -1124,9 +1140,9 @@ public class Page_Book extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
-    } event_Delete_BookActionPerformed
+    }
 
-    private void Delete_CatActionPerformed(java.awt.event.ActionEvent evt) { event_Delete_CatActionPerformed
+    private void Delete_CatActionPerformed(java.awt.event.ActionEvent evt) {
         int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this category?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
@@ -1142,9 +1158,9 @@ public class Page_Book extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Failed to Delete Category: " + e.getMessage());
             }
         }
-    } event_Delete_CatActionPerformed
+    }
 
-    private void Edit_CatActionPerformed(java.awt.event.ActionEvent evt) { event_Edit_CatActionPerformed
+    private void Edit_CatActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String sql = "UPDATE Category SET Category_Name = ?, Description = ? WHERE Category_ID = ?";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -1164,17 +1180,17 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Update Category Data: " + e.getMessage());
         }
-    } event_Edit_CatActionPerformed
+    }
 
-    private void Refresh_CatActionPerformed(java.awt.event.ActionEvent evt) { event_Refresh_CatActionPerformed
+    private void Refresh_CatActionPerformed(java.awt.event.ActionEvent evt) {
         Cat_Name.setText("");
         Cat_Description.setText("");
 
         loadCatTable();
         autoIDCategory();
-    } event_Refresh_CatActionPerformed
+    }
 
-    private void Add_PubActionPerformed(java.awt.event.ActionEvent evt) { event_Add_PubActionPerformed
+    private void Add_PubActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String sql = "INSERT INTO Publisher (Publisher_ID, Publisher_Name, Publisher_Contact) VALUES (?, ?, ?)";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -1194,9 +1210,9 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Add Publisher: " + e.getMessage());
         }
-    } event_Add_PubActionPerformed
+    }
 
-    private void Edit_PubActionPerformed(java.awt.event.ActionEvent evt) { event_Edit_PubActionPerformed
+    private void Edit_PubActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String sql = "UPDATE Publisher SET Publisher_Name = ?, Publisher_Contact = ? WHERE Publisher_ID = ?";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -1213,9 +1229,9 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Update Publisher Data: " + e.getMessage());
         }
-    } event_Edit_PubActionPerformed
+    }
 
-    private void Delete_PubActionPerformed(java.awt.event.ActionEvent evt) { event_Delete_PubActionPerformed
+    private void Delete_PubActionPerformed(java.awt.event.ActionEvent evt) {
          int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this publisher?", "Confirmation Delete", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
@@ -1231,24 +1247,24 @@ public class Page_Book extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Failed to Delete Publisher: " + e.getMessage());
             }
         }
-    } event_Delete_PubActionPerformed
+    }
 
-    private void Refresh_PubActionPerformed(java.awt.event.ActionEvent evt) { event_Refresh_PubActionPerformed
+    private void Refresh_PubActionPerformed(java.awt.event.ActionEvent evt) {
         Pub_Name.setText("");
         Pub_Contact.setText("");
 
         loadPubTable();
         autoIDPublisher();
-    } event_Refresh_PubActionPerformed
+    }
 
-    private void Pub_TableMouseClicked(java.awt.event.MouseEvent evt) { event_Pub_TableMouseClicked
+    private void Pub_TableMouseClicked(java.awt.event.MouseEvent evt) {
         int row = Pub_Table.getSelectedRow();
         Pub_ID.setText(Pub_Table.getValueAt(row, 0).toString());
         Pub_Name.setText(Pub_Table.getValueAt(row, 1).toString());
         Pub_Contact.setText(Pub_Table.getValueAt(row, 2).toString());
-    } event_Pub_TableMouseClicked
+    }
 
-    private void Add_AuthActionPerformed(java.awt.event.ActionEvent evt) { event_Add_AuthActionPerformed
+    private void Add_AuthActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String sql = "INSERT INTO author_book (Author_Book_ID, Author_Book_Name, Author_Book_Contact) VALUES (?, ?, ?)";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -1268,27 +1284,27 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Add Author: " + e.getMessage());
         }
-    } event_Add_AuthActionPerformed
+    }
 
-    private void Auth_IDActionPerformed(java.awt.event.ActionEvent evt) { event_Auth_IDActionPerformed
+    private void Auth_IDActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } event_Auth_IDActionPerformed
+    }
 
-    private void Refresh_AuthActionPerformed(java.awt.event.ActionEvent evt) { event_Refresh_AuthActionPerformed
+    private void Refresh_AuthActionPerformed(java.awt.event.ActionEvent evt) {
         Auth_Name.setText("");
         Auth_Contact.setText("");
         loadAuthTable();
         autoIDAuthor();
-    } event_Refresh_AuthActionPerformed
+    }
 
-    private void Auth_TableMouseClicked(java.awt.event.MouseEvent evt) { event_Auth_TableMouseClicked
+    private void Auth_TableMouseClicked(java.awt.event.MouseEvent evt) {
         int row = Auth_Table.getSelectedRow();
         Auth_ID.setText(Auth_Table.getValueAt(row, 0).toString());
         Auth_Name.setText(Auth_Table.getValueAt(row, 1).toString());
         Auth_Contact.setText(Auth_Table.getValueAt(row, 2).toString());
-    } event_Auth_TableMouseClicked
+    }
 
-    private void Delete_AuthActionPerformed(java.awt.event.ActionEvent evt) { event_Delete_AuthActionPerformed
+    private void Delete_AuthActionPerformed(java.awt.event.ActionEvent evt) {
         int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this author?", "Confirmation Delete", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
@@ -1304,9 +1320,9 @@ public class Page_Book extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Failed to Delete Author: " + e.getMessage());
                 }
         }
-    } event_Delete_AuthActionPerformed
+    }
 
-    private void Edit_AuthActionPerformed(java.awt.event.ActionEvent evt) { event_Edit_AuthActionPerformed
+    private void Edit_AuthActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String sql = "UPDATE author_book SET Author_Book_Name = ?, Author_Book_Contact = ? WHERE Author_Book_ID = ?";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -1323,7 +1339,7 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Update Author Data: " + e.getMessage());
         }
-    } event_Edit_AuthActionPerformed
+    }
 
     private void loadBorrowTable() {
         try {
@@ -1337,7 +1353,7 @@ public class Page_Book extends javax.swing.JFrame {
         }
     }
 
-    private void Add_BorrowActionPerformed(java.awt.event.ActionEvent evt) { event_Add_BorrowActionPerformed
+    private void Add_BorrowActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String issuedID = Issued_ID_Field.getText();
             String bookID = Borrow_Book.getSelectedItem().toString().split(" - ")[0];
@@ -1371,9 +1387,9 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Borrow Book: " + e.getMessage());
         }
-    } event_Add_BorrowActionPerformed
+    }
 
-    private void Borrow_TableMouseClicked(java.awt.event.MouseEvent evt) { event_Borrow_TableMouseClicked
+    private void Borrow_TableMouseClicked(java.awt.event.MouseEvent evt) {
         int row = Borrow_Table.getSelectedRow();
         String id = Borrow_Table.getValueAt(row, 0).toString();
         Issued_ID_Field.setText(id);
@@ -1390,7 +1406,7 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("Error clicking table: " + e.getMessage());
         }
-    } event_Borrow_TableMouseClicked
+    }
 
     private void autoIDIssued() {
         try {
@@ -1414,7 +1430,7 @@ public class Page_Book extends javax.swing.JFrame {
         }
     }
 
-    private void Delete_BorrowActionPerformed(java.awt.event.ActionEvent evt) { event_Delete_BorrowActionPerformed
+    private void Delete_BorrowActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String bID = Borrow_Book.getSelectedItem().toString().split(" - ")[0];
             String sqlDel = "DELETE FROM issued_book WHERE Book_ID = ?";
@@ -1435,9 +1451,9 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Return Book: " + e.getMessage());
         }
-    } event_Delete_BorrowActionPerformed
+    }
 
-    private void Edit_BorrowActionPerformed(java.awt.event.ActionEvent evt) { event_Edit_BorrowActionPerformed
+    private void Edit_BorrowActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String idIssued = Issued_ID_Field.getText();
             
@@ -1458,9 +1474,9 @@ public class Page_Book extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Failed to Edit Borrowing Data: " + e.getMessage());
         }
-    } event_Edit_BorrowActionPerformed
+    }
 
-    private void Refresh_BorrowActionPerformed(java.awt.event.ActionEvent evt) { event_Refresh_BorrowActionPerformed
+    private void Refresh_BorrowActionPerformed(java.awt.event.ActionEvent evt) {
         loadBorrowTable();
         autoIDIssued();
         loadComboBox();
@@ -1470,7 +1486,7 @@ public class Page_Book extends javax.swing.JFrame {
 
         Borrow_Book.setSelectedIndex(0);
         Borrow_Member.setSelectedIndex(0);
-    } event_Refresh_BorrowActionPerformed
+    }
 
     private void MenuButtonMouseClicked(java.awt.event.MouseEvent evt) {
         if (parent != null) {
@@ -1484,7 +1500,7 @@ public class Page_Book extends javax.swing.JFrame {
         this.dispose();
     }
 
-    private void LogOutButtonActionPerformed(ActionEvent evt) {
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {
         LoginPage lp = new LoginPage();
         lp.setLocationRelativeTo(null);
         lp.setVisible(true);
