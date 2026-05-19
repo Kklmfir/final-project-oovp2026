@@ -3,11 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pkgfinal.project.oovp2026;
+import java.sql.*;
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import pkgfinal.project.oovp2026.MenuPage;
 public class Page_Audio_Book extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Page_Audio_Book.class.getName());
+    private MenuPage parent;
 
     /**
      * Creates new form Page_Book
