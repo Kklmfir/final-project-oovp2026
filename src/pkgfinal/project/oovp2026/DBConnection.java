@@ -25,4 +25,9 @@ public class DBConnection {
             return null;
         }
     }
+
+    public static Connection getConnection() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getConnection'");
+    }
 }

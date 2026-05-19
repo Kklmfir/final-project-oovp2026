@@ -2,19 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-/**
- *
- * @author faira
- */
+package pkgfinal.project.oovp2026;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import librarymanagementsystem.DBConnection;
-import net.proteanit.sql.DbUtils;
-
 
 public class MemberForm extends javax.swing.JFrame {
     Connection conn = DBConnection.connect();
